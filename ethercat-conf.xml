@@ -6,23 +6,21 @@
     <!-- EL8 Servo Drive -->
     <slave idx="3" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
-      <syncManager idx="0" dir="out">
+      <syncManager idx="2" dir="out">
         <pdo idx="1601">
           <pdoEntry idx="6040" subIdx="00" bitLen="16" halPin="cia-controlword" halType="u32"/>
           <pdoEntry idx="6060" subIdx="00" bitLen="8" halPin="opmode" halType="s32"/>
           <pdoEntry idx="607A" subIdx="00" bitLen="32" halPin="target-position" halType="s32"/>
         </pdo>
       </syncManager>
-      <syncManager idx="1" dir="in">
+      <syncManager idx="3" dir="in">
         <pdo idx="1a00">
-          <!-- Byte 0 -->
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
-
   </master>
 </masters>
 
