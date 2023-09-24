@@ -5,7 +5,7 @@
     <slave idx="2" type="EL2008"/>
     <!-- EL8 Servo Drive -->
     <slave idx="3" type="generic" vid="00004321" pid="000010c2" configPdos="true">
-	  <dcConf assignActive="300" sync0Cycle="*1" sync0Shift="0"/>
+	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="0" dir="out">
         <pdo idx="1601">
           <pdoEntry idx="6040" subIdx="00" bitLen="16" halPin="cia-controlword" halType="u32"/>
