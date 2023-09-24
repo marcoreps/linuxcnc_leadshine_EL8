@@ -11,37 +11,31 @@ addf motion-controller        servo-thread
 addf cia402.0.write-all       servo-thread
 addf lcec.write-all           servo-thread
 
+
+setp iocontrol.0.emc-enable-in 1
+
 #*******************
 #  AXIS X
 #*******************
 
-# --- joint signals for motion
-
-net x-pos-cmd    <= joint.0.motor-pos-cmd
-net x-pos-fb     <= joint.0.motor-pos-fb
-net x-enable     <= joint.0.amp-enable-out
-
-# --- connect stepper driver to joint
-
-net x-pos-cmd    => cia402.0.pos-cmd
-net x-pos-fb     => cia402.0.pos-fb
-net x-enable     => cia402.0.enable
-
-# --- ect60 settings
-
 setp cia402.0.csp-mode 1
 setp cia402.0.pos-scale 10000
 
-# --- from stepper(ethercat) to cia402
+# joint signals for motion
+
+net x-pos-cmd     joint.0.motor-pos-cmd => cia402.0.pos-cmd
+net x-pos-fb      joint.0.motor-pos-fb => cia402.0.pos-fb
+net x-enable      joint.0.amp-enable-out => cia402.0.enable
+
+# ethercat to cia402 driver
 
 net x-statusword      lcec.0.3.cia-statusword  => cia402.0.statusword
 net x-opmode-display  lcec.0.3.opmode-display  => cia402.0.opmode-display
 net x-drv-act-pos     lcec.0.3.actual-position => cia402.0.drv-actual-position
 
-# --- from cia402 to stepper(ethercat) 
+# cia402 driver to ethercat
 
 net x-controlword         cia402.0.controlword         => lcec.0.3.cia-controlword
 net x-modes-of-operation  cia402.0.opmode              => lcec.0.3.opmode
 net x-drv-target-pos      cia402.0.drv-target-position => lcec.0.3.target-position
 
-setp iocontrol.0.emc-enable-in 1
