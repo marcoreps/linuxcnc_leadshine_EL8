@@ -6,11 +6,9 @@ loadrt cia402 count=1
 
 addf lcec.read-all            servo-thread
 addf cia402.0.read-all        servo-thread
-addf cia402.1.read-all        servo-thread
 addf motion-command-handler   servo-thread
 addf motion-controller        servo-thread
 addf cia402.0.write-all       servo-thread
-addf cia402.1.write-all       servo-thread
 addf lcec.write-all           servo-thread
 
 #*******************
