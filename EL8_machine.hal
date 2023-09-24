@@ -38,11 +38,9 @@ setp cia402.0.pos-scale 10000
 net x-statusword      lcec.0.3.cia-statusword  => cia402.0.statusword
 net x-opmode-display  lcec.0.3.opmode-display  => cia402.0.opmode-display
 net x-drv-act-pos     lcec.0.3.actual-position => cia402.0.drv-actual-position
-net x-drv-act-velo    lcec.0.3.actual-velocity => cia402.0.drv-actual-velocity
 
 # --- from cia402 to stepper(ethercat) 
 
 net x-controlword         cia402.0.controlword         => lcec.0.3.cia-controlword
 net x-modes-of-operation  cia402.0.opmode              => lcec.0.3.opmode
 net x-drv-target-pos      cia402.0.drv-target-position => lcec.0.3.target-position
-net x-drv-target-velo     cia402.0.drv-target-velocity => lcec.0.3.target-velocity
