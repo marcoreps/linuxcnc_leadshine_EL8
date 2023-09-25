@@ -18,6 +18,7 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
+		  <pdoEntry idx="6077" subIdx="00" bitLen="32" halPin="actual-torque" halType="s16"/>
         </pdo>
       </syncManager>
     </slave>
