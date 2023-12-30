@@ -76,11 +76,8 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
-<<<<<<< HEAD
 		  <pdoEntry idx="6077" subIdx="00" bitLen="32" halPin="actual-torque" halType="s16"/>
-=======
           <pdoEntry idx="6074" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
->>>>>>> 2dec281 (3 axis CiA402 working with real time load display in GUI)
         </pdo>
       </syncManager>
     </slave>
