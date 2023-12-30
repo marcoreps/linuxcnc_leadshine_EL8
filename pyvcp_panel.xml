@@ -1,0 +1,38 @@
+<pyvcp>
+	
+    <labelframe text="EL2008">
+		<button>
+			<halpin>"dout0"</halpin>
+			<text>"Relay 1"</text>
+		</button>
+		<button>
+			<halpin>"dout1"</halpin>
+			<text>"Relay 2"</text>
+		</button>
+    </labelframe>
+    
+    <labelframe text="Servos">
+		<label>
+            <text>"X Axis Load:"</text>
+        </label>
+        <bar>
+            <halpin>"x-load"</halpin>
+            <max_>1000</max_>
+        </bar>
+        <label>
+            <text>"Z Axis Load:"</text>
+        </label>
+        <bar>
+            <halpin>"y-load"</halpin>
+            <max_>1000</max_>
+        </bar>
+        <label>
+            <text>"Z Axis Load:"</text>
+        </label>
+        <bar>
+            <halpin>"z-load"</halpin>
+            <max_>1000</max_>
+        </bar>
+    </labelframe>
+    
+</pyvcp>
