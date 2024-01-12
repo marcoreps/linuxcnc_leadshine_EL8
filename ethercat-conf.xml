@@ -17,8 +17,7 @@
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
           <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
-          <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
-          <pdoEntry idx="5502" subIdx="06" bitLen="16" halPin="temperature" halType="s32"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halPin="actual-following-error" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
@@ -40,7 +39,6 @@
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
           <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
           <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
-          <pdoEntry idx="5502" subIdx="06" bitLen="16" halPin="temperature" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
@@ -62,7 +60,6 @@
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
           <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
           <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
-          <pdoEntry idx="5502" subIdx="06" bitLen="16" halPin="temperature" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
@@ -84,7 +81,6 @@
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
           <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
           <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
-          <pdoEntry idx="5502" subIdx="06" bitLen="16" halPin="temperature" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
