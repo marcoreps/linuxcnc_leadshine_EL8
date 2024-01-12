@@ -20,7 +20,7 @@
             <max_>1000</max_>
         </bar>
         <label>
-            <text>"Z Axis Load:"</text>
+            <text>"Y Axis Load:"</text>
         </label>
         <bar>
             <halpin>"y-load"</halpin>
