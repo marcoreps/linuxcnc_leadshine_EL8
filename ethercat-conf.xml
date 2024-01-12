@@ -1,6 +1,6 @@
 <masters>
   <master idx="0" appTimePeriod="1000000" refClockSyncCycles="5">
-    
+
     <!-- EL8 Servo Drive -->
     <slave idx="0" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
@@ -22,7 +22,7 @@
         </pdo>
       </syncManager>
     </slave>
-    
+
     <!-- EL8 Servo Drive -->
     <slave idx="1" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
@@ -44,7 +44,7 @@
         </pdo>
       </syncManager>
     </slave>
-    
+
     <!-- EL8 Servo Drive -->
     <slave idx="2" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
@@ -66,7 +66,7 @@
         </pdo>
       </syncManager>
     </slave>
-    
+
     <!-- EL8 Servo Drive -->
     <slave idx="3" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
@@ -88,11 +88,10 @@
         </pdo>
       </syncManager>
     </slave>
-    
+
     <slave idx="4" type="EK1100"/>
     <slave idx="5" type="EL1008"/>
     <slave idx="6" type="EL2008"/>
-    
+
   </master>
 </masters>
-
