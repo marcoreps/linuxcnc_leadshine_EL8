@@ -1,7 +1,7 @@
 <masters>
   <master idx="0" appTimePeriod="1000000" refClockSyncCycles="5">
 
-    <!-- EL8 Servo Drive -->
+    <!-- A axis EL8 Servo Drive -->
     <slave idx="0" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="2" dir="out">
@@ -16,13 +16,12 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
-          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
-          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halPin="actual-following-error" halType="s32"/>
+          <pdoEntry idx="6074" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
 
-    <!-- EL8 Servo Drive -->
+    <!-- Z axis EL8 Servo Drive -->
     <slave idx="1" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="2" dir="out">
@@ -37,13 +36,12 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
-          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
-          <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
+          <pdoEntry idx="6074" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
 
-    <!-- EL8 Servo Drive -->
+    <!-- Y axis EL8 Servo Drive -->
     <slave idx="2" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="2" dir="out">
@@ -58,13 +56,12 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
-          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
-          <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
+          <pdoEntry idx="6074" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
 
-    <!-- EL8 Servo Drive -->
+    <!-- X axis EL8 Servo Drive -->
     <slave idx="3" type="generic" vid="00004321" pid="000010c2" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="2" dir="out">
@@ -79,8 +76,7 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
-          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
-          <pdoEntry idx="60F4" subIdx="00" bitLen="16" halPin="actual-following-error" halType="s32"/>
+          <pdoEntry idx="6074" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
         </pdo>
       </syncManager>
     </slave>
