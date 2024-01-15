@@ -37,6 +37,8 @@ net x-opmode-display  lcec.0.3.opmode-display  => cia402.3.opmode-display
 net x-drv-act-pos     lcec.0.3.actual-position => cia402.3.drv-actual-position
 
 # other parameters
+net x-amp-fault joint.0.amp-fault-in   <= cia402.3.drv-fault
+net x-home-index joint.0.index-enable  => cia402.3.home
 
 
 # cia402 driver to ethercat
