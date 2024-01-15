@@ -37,14 +37,13 @@ net x-statusword      lcec.0.3.cia-statusword  => cia402.3.statusword
 net x-opmode-display  lcec.0.3.opmode-display  => cia402.3.opmode-display
 net x-drv-act-pos     lcec.0.3.actual-position => cia402.3.drv-actual-position
 
-# other parameters
-net x-home-index joint.0.index-enable  => cia402.3.home
-
-
 # cia402 driver to ethercat
 net x-controlword         cia402.3.controlword         => lcec.0.3.cia-controlword
 net x-modes-of-operation  cia402.3.opmode              => lcec.0.3.opmode
 net x-drv-target-pos      cia402.3.drv-target-position => lcec.0.3.target-position
+
+# other parameters
+net x-home-index joint.0.index-enable  => cia402.3.home
 
 #*******************
 #  AXIS Y
@@ -69,6 +68,9 @@ net y-controlword         cia402.2.controlword         => lcec.0.2.cia-controlwo
 net y-modes-of-operation  cia402.2.opmode              => lcec.0.2.opmode
 net y-drv-target-pos      cia402.2.drv-target-position => lcec.0.2.target-position
 
+# other parameters
+net y-home-index joint.1.index-enable  => cia402.2.home
+
 #*******************
 #  AXIS Z
 #*******************
@@ -92,6 +94,9 @@ net z-controlword         cia402.1.controlword         => lcec.0.1.cia-controlwo
 net z-modes-of-operation  cia402.1.opmode              => lcec.0.1.opmode
 net z-drv-target-pos      cia402.1.drv-target-position => lcec.0.1.target-position
 
+# other parameters
+net z-home-index joint.2.index-enable  => cia402.1.home
+
 #*******************
 #  AXIS A
 #*******************
@@ -114,6 +119,9 @@ net z-drv-target-pos      cia402.1.drv-target-position => lcec.0.1.target-positi
 #net a-controlword         cia402.0.controlword         => lcec.0.0.cia-controlword
 #net a-modes-of-operation  cia402.0.opmode              => lcec.0.0.opmode
 #net a-drv-target-pos      cia402.0.drv-target-position => lcec.0.0.target-position
+
+# other parameters
+#net a-home-index joint.3.index-enable  => cia402.0.home
 
 #*******************
 #  IOs
