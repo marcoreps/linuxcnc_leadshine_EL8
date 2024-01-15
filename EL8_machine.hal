@@ -119,5 +119,4 @@ net z-drv-target-pos      cia402.1.drv-target-position => lcec.0.1.target-positi
 #  IOs
 #*******************
 
-net dout0 	=> 	lcec.0.6.dout-0
-net dout1 	=> 	lcec.0.6.dout-1
+
