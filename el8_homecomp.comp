@@ -159,11 +159,11 @@ typedef enum {
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
        custom_home_state_t nextcstate;
 
-    if ( H[joint_num].home_state == HOME_IDLE) return 0; // nothing to do
+    if ( customH[joint_num].home_state == HOME_IDLE) return 0; // nothing to do
 
-    if ((H[joint_num].home_state == HOME_START) && (chomestate[joint_num] == CUSTOM_IDLE) ) {
-        H[joint_num].homing = 1;
-        H[joint_num].homed  = 0;
+    if ((customH[joint_num].home_state == HOME_START) && (chomestate[joint_num] == CUSTOM_IDLE) ) {
+        customH[joint_num].homing = 1;
+        customH[joint_num].homed  = 0;
         chomestate[joint_num] = CUSTOM_1; // set first non-idle custom_home_state
     }
     // For this example, just walk thru custom_home_states with prints.
@@ -173,29 +173,29 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         
       case CUSTOM_1:
           rtapi_print("state machine started");
-          H[joint_num].request_servo_homing = 1;
+          customH[joint_num].request_servo_homing = 1;
           chomestate[joint_num] = CUSTOM_2;
           break;
                 
       case CUSTOM_2:
           rtapi_print("checking if the servo has heard");
-          if (H[joint_num].servo_is_homing) {
-              H[joint_num].request_servo_homing = 0;
+          if (customH[joint_num].servo_is_homing) {
+              customH[joint_num].request_servo_homing = 0;
               chomestate[joint_num] = CUSTOM_3;
           }
           break;
           
       case CUSTOM_3:
           rtapi_print("servo has heard and should be homing now");
-          if (H[joint_num].servo_finished_homing)
+          if (customH[joint_num].servo_finished_homing)
               nextcstate=CUSTOM_FINI;
           break;
       
       case CUSTOM_FINI:
            rtapi_print("servo has finished homing yay");
-           H[joint_num].homing = 0;
-           H[joint_num].homed  = 1;
-           H[joint_num].home_state = HOME_IDLE;
+           customH[joint_num].homing = 0;
+           customH[joint_num].homed  = 1;
+           customH[joint_num].home_state = HOME_IDLE;
            nextcstate = CUSTOM_IDLE;
            C_SHOW;
            chomestate[joint_num] = nextcstate;
