@@ -112,9 +112,9 @@ static int custom_makepins(int id,int njoints)
         retval += hal_pin_bit_newf(HAL_IO, &(addr->request_servo_homing), id,
                                   "joint.%d.request-servo-homing", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->servo_is_homing), id,
-                                  "joint.%d.servo_is_homing", jno);
+                                  "joint.%d.servo-is-homing", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->servo_finished_homing), id,
-                                  "joint.%d.servo_finished_homing", jno);
+                                  "joint.%d.servo-finished-homing", jno);
     }
     return retval;
 } // custom_makepins()
