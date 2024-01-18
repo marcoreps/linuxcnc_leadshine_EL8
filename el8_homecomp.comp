@@ -197,7 +197,6 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
            H[joint_num].homed  = 1;
            H[joint_num].home_state = HOME_IDLE;
            nextcstate = CUSTOM_IDLE;
-           C_SHOW;
            chomestate[joint_num] = nextcstate;
            return 0; // finished custom_home_states
            break;
