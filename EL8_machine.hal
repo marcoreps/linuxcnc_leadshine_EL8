@@ -1,5 +1,5 @@
 loadrt [KINS]KINEMATICS
-loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS unlock_joints_mask=0xF
 loadusr -W lcec_conf ethercat-conf.xml
 loadrt lcec
 loadrt cia402 count=4
