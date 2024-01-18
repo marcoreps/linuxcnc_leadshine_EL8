@@ -159,11 +159,11 @@ typedef enum {
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
        custom_home_state_t nextcstate;
 
-    if ( customH[joint_num].home_state == HOME_IDLE) return 0; // nothing to do
+    if ( H[joint_num].home_state == HOME_IDLE) return 0; // nothing to do
 
-    if ((customH[joint_num].home_state == HOME_START) && (chomestate[joint_num] == CUSTOM_IDLE) ) {
-        customH[joint_num].homing = 1;
-        customH[joint_num].homed  = 0;
+    if ((H[joint_num].home_state == HOME_START) && (chomestate[joint_num] == CUSTOM_IDLE) ) {
+        H[joint_num].homing = 1;
+        H[joint_num].homed  = 0;
         chomestate[joint_num] = CUSTOM_1; // set first non-idle custom_home_state
     }
     // For this example, just walk thru custom_home_states with prints.
@@ -193,9 +193,9 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       
       case CUSTOM_FINI:
            rtapi_print("servo has finished homing yay");
-           customH[joint_num].homing = 0;
-           customH[joint_num].homed  = 1;
-           customH[joint_num].home_state = HOME_IDLE;
+           H[joint_num].homing = 0;
+           H[joint_num].homed  = 1;
+           H[joint_num].home_state = HOME_IDLE;
            nextcstate = CUSTOM_IDLE;
            C_SHOW;
            chomestate[joint_num] = nextcstate;
