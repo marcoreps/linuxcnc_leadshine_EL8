@@ -49,12 +49,6 @@ option  homemod;
 option  extra_setup;
 ;;
 
-/* To incorporate default homing.c file from a local git src tree:
-** enable #define HOMING_BASE set to the path to the current homing.c file.
-** (Note: CUSTOM_HOMEMODULE precludes duplicate api symbols)
-** (Edit myname as required for valid path)
-*/
-
 #define HOMING_BASE /home/cnc/linuxcnc-dev/src/emc/motion/homing.c
 
 #define STR(s)  #s
@@ -71,7 +65,7 @@ EXTRA_SETUP() {
     if (!home_parms) {home_parms = "no_home_parms";}
     rtapi_print("@@@%s:%s: home_parms=%s\n",__FILE__,__FUNCTION__,home_parms);
     rtapi_print("\n!!!%s: HOMING_BASE=%s\n"
-                "!!!Customize using hal pin(s): joint.N.request-custom-homing\n"
+                "!!!Customize using hal pin(s): joint.N.request-servo-homing\n"
                 ,__FILE__,XSTR(HOMING_BASE));
 
     return 0;
@@ -85,16 +79,18 @@ EXTRA_SETUP() {
 #include USE_HOMING_BASE
 
 typedef struct {
-    bool request_custom_homing;
-    bool is_custom_homing;
+    bool request_servo_homing;
+    bool servo_is_homing;
+    bool servo_finished_homing;
 } custom_home_local_data;
 
 static custom_home_local_data customH[EMCMOT_MAX_JOINTS];
 
 // data for per-joint custom-homing-specific hal pins:
 typedef struct {
-    hal_bit_t *request_custom_homing; // input  requests custom homing
-    hal_bit_t *is_custom_homing;      // output verifies custom homing
+    hal_bit_t *request_servo_homing;   // output requests servo drive homing
+    hal_bit_t *servo_is_homing;        // input from servo drive during homing
+    hal_bit_t *servo_finished_homing;  // input from servo drive after homing
 } custom_one_joint_home_data_t;
 
 typedef struct {
@@ -118,10 +114,12 @@ static int custom_makepins(int id,int njoints)
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
 
-        retval += hal_pin_bit_newf(HAL_IN, &(addr->request_custom_homing), id,
-                                  "joint.%d.request-custom-homing", jno);
-        retval += hal_pin_bit_newf(HAL_OUT, &(addr->is_custom_homing), id,
-                                  "joint.%d.is-custom-homing", jno);
+        retval += hal_pin_bit_newf(HAL_OUT, &(addr->request_servo_homing), id,
+                                  "joint.%d.request-servo-homing", jno);
+        retval += hal_pin_bit_newf(HAL_IN, &(addr->servo_is_homing), id,
+                                  "joint.%d.servo_is_homing", jno);
+        retval += hal_pin_bit_newf(HAL_IN, &(addr->servo_finished_homing), id,
+                                  "joint.%d.servo_finished_homing", jno);
     }
     return retval;
 } // custom_makepins()
@@ -132,10 +130,8 @@ static void custom_read_homing_in_pins(int njoints)
     custom_one_joint_home_data_t *addr;
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
-        customH[jno].request_custom_homing = *(addr->request_custom_homing); // IN
-
-        // echo for verification:
-        customH[jno].is_custom_homing = customH[jno].request_custom_homing;
+        customH[jno].servo_is_homing = *(addr->servo_is_homing);             // IN
+        customH[jno].servo_finished_homing = *(addr->servo_finished_homing); // IN
     }
 }
 
@@ -145,7 +141,7 @@ static void custom_write_homing_out_pins(int njoints)
     custom_one_joint_home_data_t *addr;
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
-        *(addr->is_custom_homing) = customH[jno].is_custom_homing; // OUT
+        *(addr->request_servo_homing) = customH[jno].request_servo_homing; // OUT
     }
 }
 
@@ -163,11 +159,6 @@ typedef enum {
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
        custom_home_state_t nextcstate;
 
-#define C_SHOW \
-    rtapi_print("H[%d].homed=%d,homing=%d,home_state=%d chomestate[%d]=%d next=%d\n" \
-      ,joint_num,H[joint_num].homed,H[joint_num].homing,H[joint_num].home_state \
-      ,joint_num,chomestate[joint_num],nextcstate);
-
     if ( H[joint_num].home_state == HOME_IDLE) return 0; // nothing to do
 
     if ((H[joint_num].home_state == HOME_START) && (chomestate[joint_num] == CUSTOM_IDLE) ) {
@@ -179,15 +170,29 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
     // Note: remains in the base home_state: HOME_START for all custom_home_states.
     //       On completion, return to HOME_IDLE, CUSTOM_IDLE states.
     switch (chomestate[joint_num]) {
+        
       case CUSTOM_1:
-                     // Each CUSTOM_* state should do something and/or check something
-                     // and set nexstcstate according to the design goals.
-                     // Halpin variables can be read and/or set for next write.
-                     nextcstate=CUSTOM_2;    C_SHOW; chomestate[joint_num] = nextcstate; break;
-      case CUSTOM_2: nextcstate=CUSTOM_3;    C_SHOW; chomestate[joint_num] = nextcstate; break;
-      case CUSTOM_3: nextcstate=CUSTOM_4;    C_SHOW; chomestate[joint_num] = nextcstate; break;
-      case CUSTOM_4: nextcstate=CUSTOM_FINI; C_SHOW; chomestate[joint_num] = nextcstate; break;
+          rtapi_print("state machine started")
+          H[joint_num].request_servo_homing = 1;
+          chomestate[joint_num] = CUSTOM_2;
+          break;
+                
+      case CUSTOM_2:
+          rtapi_print("checking if the servo has heard")
+          if (H[joint_num].servo_is_homing) {
+              H[joint_num].request_servo_homing = 0;
+              chomestate[joint_num] = CUSTOM_3;
+          }
+          break;
+          
+      case CUSTOM_3:
+          rtapi_print("servo has heard and should be homing now")
+          if (H[joint_num].servo_finished_homing)
+              nextcstate=CUSTOM_FINI;
+          break;
+      
       case CUSTOM_FINI:
+           rtapi_print("servo has finished homing yay")
            H[joint_num].homing = 0;
            H[joint_num].homed  = 1;
            H[joint_num].home_state = HOME_IDLE;
@@ -248,9 +253,9 @@ bool do_homing(void)
     for (joint_num = 0; joint_num < all_joints; joint_num++) {
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
-		
+        
         homing_flag += custom_1joint_state_machine(joint_num);
-		
+        
     }
     if ( homing_flag > 0 ) { /* one or more joint is homing */
         homing_active = 1;
