@@ -63,11 +63,6 @@ RTAPI_MP_STRING(home_parms,"Example home parms");
 // EXTRA_SETUP is executed before rtapi_app_main()
 EXTRA_SETUP() {
     if (!home_parms) {home_parms = "no_home_parms";}
-    rtapi_print("@@@%s:%s: home_parms=%s\n",__FILE__,__FUNCTION__,home_parms);
-    rtapi_print("\n!!!%s: HOMING_BASE=%s\n"
-                "!!!Customize using hal pin(s): joint.N.request-servo-homing\n"
-                ,__FILE__,XSTR(HOMING_BASE));
-
     return 0;
 }
 
