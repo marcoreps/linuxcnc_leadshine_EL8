@@ -161,9 +161,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         H[joint_num].homed  = 0;
         chomestate[joint_num] = CUSTOM_1; // set first non-idle custom_home_state
     }
-    // For this example, just walk thru custom_home_states with prints.
-    // Note: remains in the base home_state: HOME_START for all custom_home_states.
-    //       On completion, return to HOME_IDLE, CUSTOM_IDLE states.
+
     switch (chomestate[joint_num]) {
         
       case CUSTOM_1:
@@ -174,10 +172,8 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
                 
       case CUSTOM_2:
           rtapi_print("checking if the servo has heard");
-          if (customH[joint_num].servo_is_homing) {
-              customH[joint_num].request_servo_homing = 0;
+          if (customH[joint_num].servo_is_homing)
               chomestate[joint_num] = CUSTOM_3;
-          }
           break;
           
       case CUSTOM_3:
@@ -188,6 +184,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       
       case CUSTOM_FINI:
            rtapi_print("servo has finished homing yay");
+		   customH[joint_num].request_servo_homing = 0;
            H[joint_num].homing = 0;
            H[joint_num].homed  = 1;
            H[joint_num].home_state = HOME_IDLE;
