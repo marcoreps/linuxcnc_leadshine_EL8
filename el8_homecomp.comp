@@ -175,6 +175,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 		  for (int c = 1; c <= 32767; c++)
 			   for (int d = 1; d <= 32767; d++)
 			   {}
+		  chomestate[joint_num] = CUSTOM_3;
           break;
 
       case CUSTOM_3:
