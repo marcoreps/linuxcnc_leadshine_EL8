@@ -152,6 +152,7 @@ variable double velo_scale_rcpt;
 variable bool pos_mode;
 variable bool init_pos_mode = 0;
 variable long auto_fault_reset_delay;
+variable int first_few = 10;
 
 //declare functions
 function read_all;
@@ -196,6 +197,9 @@ void check_scales(hal_float_t *scale,float *scale_old, double *scale_rcpt) {
 }
   
 FUNCTION(read_all) {
+	
+		if (first_few>0)
+		rtapi_print("read_all() \n");
 
   // check for change in scale value
   check_scales(&pos_scale, &pos_scale_old, &pos_scale_rcpt);
@@ -230,11 +234,20 @@ FUNCTION(read_all) {
       stat_target_reached = 0;
     }
 
+
   //home states  
   if (opmode_homing) {
+	  if (first_few>0)
+		rtapi_print("we are in opmode_homing \n");
     stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
     stat_homing   = !stat_homed && !((statusword >> 10) & 1);
   }
+  
+  	if ((first_few>0)&&stat_homed)
+		rtapi_print("stat_homed has been set \n");
+	
+	  	if ((first_few>0)&&stat_homing)
+		rtapi_print("stat_homing has been set \n");
 
   // update fault output
   if (auto_fault_reset_delay > 0) {
@@ -246,6 +259,10 @@ FUNCTION(read_all) {
 }
 
 FUNCTION(write_all) {
+	
+	if (first_few>0)
+		rtapi_print("write_all() \n");
+	
   int enable_edge;
 
   //init opmode
@@ -308,9 +325,13 @@ FUNCTION(write_all) {
   }
   // mode Home and start homing
   if (home) {
-	//rtapi_print("homing pin seen! \n");
+	if (first_few>0)
+		rtapi_print("homing pin seen! \n");
     opmode = OPMODE_HOMING;
     controlword |= (home << 4);  
+	first_few--;
   }
+  
+
 }
 
