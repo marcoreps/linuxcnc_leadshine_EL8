@@ -152,6 +152,7 @@ variable double velo_scale_rcpt;
 variable bool pos_mode;
 variable bool init_pos_mode = 0;
 variable long auto_fault_reset_delay;
+variable int home_servo_delay = 100;
 
 //declare functions
 function read_all;
@@ -196,8 +197,6 @@ void check_scales(hal_float_t *scale,float *scale_old, double *scale_rcpt) {
 }
   
 FUNCTION(read_all) {
-  if (home)
-    rtapi_print("read_all() \n");
 
   // check for change in scale value
   check_scales(&pos_scale, &pos_scale_old, &pos_scale_rcpt);
@@ -234,7 +233,11 @@ FUNCTION(read_all) {
 
   //home states  
   if (opmode_homing) {
-    stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
+	rtapi_print("servo home delay step: %d\n",home_servo_delay);
+    if (!home_servo_delay)
+		stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
+	else
+		home_servo_delay--;
     stat_homing   = !stat_homed && !((statusword >> 10) & 1);
   }
 
@@ -248,8 +251,6 @@ FUNCTION(read_all) {
 }
 
 FUNCTION(write_all) {
-  if (home)
-    rtapi_print("write_all() \n");
 
   int enable_edge;
 
@@ -309,8 +310,7 @@ FUNCTION(write_all) {
   // mode Home and start homing
   if (home) {
     opmode = OPMODE_HOMING;
-    if (opmode_homing)
-	  controlword |= (home << 4); 
+    controlword |= (home << 4);  
   }
 }
 
