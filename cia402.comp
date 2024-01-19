@@ -196,7 +196,8 @@ void check_scales(hal_float_t *scale,float *scale_old, double *scale_rcpt) {
 }
   
 FUNCTION(read_all) {
-	
+		if (home)
+		rtapi_print("read_all() \n");
 
 
   // check for change in scale value
@@ -256,7 +257,8 @@ if (opmode_homing) {
 }
 
 FUNCTION(write_all) {
-	
+	if (home)
+		rtapi_print("write_all() \n");
 
 	
   int enable_edge;
