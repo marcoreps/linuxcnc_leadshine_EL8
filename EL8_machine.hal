@@ -70,8 +70,10 @@ net y-controlword         cia402.1.controlword         => lcec.0.2.cia-controlwo
 net y-modes-of-operation  cia402.1.opmode              => lcec.0.2.opmode
 net y-drv-target-pos      cia402.1.drv-target-position => lcec.0.2.target-position
 
-# other parameters
-net y-home-index joint.1.index-enable  => cia402.1.home
+# homing
+net x-home-request joint.0.request-servo-homing => cia402.0.home
+net x-homing joint.0.servo-is-homing <= cia402.0.stat-homed 
+net x-homed joint.0.servo-finished-homing <= cia402.0.stat-homing 
 
 #*******************
 #  AXIS Z
@@ -96,8 +98,10 @@ net z-controlword         cia402.2.controlword         => lcec.0.1.cia-controlwo
 net z-modes-of-operation  cia402.2.opmode              => lcec.0.1.opmode
 net z-drv-target-pos      cia402.2.drv-target-position => lcec.0.1.target-position
 
-# other parameters
-net z-home-index joint.2.index-enable  => cia402.2.home
+# homing
+net x-home-request joint.0.request-servo-homing => cia402.0.home
+net x-homing joint.0.servo-is-homing <= cia402.0.stat-homed 
+net x-homed joint.0.servo-finished-homing <= cia402.0.stat-homing 
 
 #*******************
 #  AXIS A
@@ -122,11 +126,8 @@ net z-home-index joint.2.index-enable  => cia402.2.home
 #net a-modes-of-operation  cia402.3.opmode              => lcec.0.0.opmode
 #net a-drv-target-pos      cia402.3.drv-target-position => lcec.0.0.target-position
 
-# other parameters
-#net a-home-index joint.3.index-enable  => cia402.3.home
-
-#*******************
-#  IOs
-#*******************
-
+# homing
+net x-home-request joint.0.request-servo-homing => cia402.0.home
+net x-homing joint.0.servo-is-homing <= cia402.0.stat-homed 
+net x-homed joint.0.servo-finished-homing <= cia402.0.stat-homing 
 
