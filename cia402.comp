@@ -287,6 +287,9 @@ FUNCTION(write_all) {
   // write velocity command
   drv_target_velocity = (int32_t) (velocity_cmd * velo_scale);
 
+  if(stat_homed)
+	  rtapi_print("we are actually stat_homed right now, go figure! \n");
+
   // reset home command   
   if (home && (stat_homed && !stat_homed_old) && opmode_homing) {
 	rtapi_print("home is disabled because of reset home command \n");
@@ -305,7 +308,7 @@ FUNCTION(write_all) {
   }
   // mode Home and start homing
   if (home) {
-	rtapi_print("homing pin seen!");
+	rtapi_print("homing pin seen! \n");
     opmode = OPMODE_HOMING;
     controlword |= (home << 4);  
   }
