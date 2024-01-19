@@ -261,7 +261,7 @@ FUNCTION(write_all) {
   // write control register
   controlword = (1 << 2); // quick stop is not supported
   if (stat_fault) {
-	rtapi_print("home is disabled because of fault");
+	rtapi_print("home is disabled because of fault \n");
     home = 0; 
     if (fault_reset) {
       controlword |= (1 << 7); // fault reset

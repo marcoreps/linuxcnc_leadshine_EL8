@@ -44,8 +44,8 @@ net x-drv-target-pos      cia402.0.drv-target-position => lcec.0.3.target-positi
 
 # homing
 net x-home-request joint.0.request-servo-homing => cia402.0.home
-net x-homing joint.0.servo-is-homing <= cia402.0.stat-homed 
-net x-homed joint.0.servo-finished-homing <= cia402.0.stat-homing 
+net x-homing joint.0.servo-is-homing <= cia402.0.stat-homing
+net x-homed joint.0.servo-finished-homing <= cia402.0.stat-homed
 
 #*******************
 #  AXIS Y
@@ -72,8 +72,8 @@ net y-drv-target-pos      cia402.1.drv-target-position => lcec.0.2.target-positi
 
 # homing
 net y-home-request joint.1.request-servo-homing => cia402.1.home
-net y-homing joint.1.servo-is-homing <= cia402.1.stat-homed 
-net y-homed joint.1.servo-finished-homing <= cia402.1.stat-homing 
+net y-homing joint.1.servo-is-homing <= cia402.1.stat-homing 
+net y-homed joint.1.servo-finished-homing <= cia402.1.stat-homed
 
 #*******************
 #  AXIS Z
@@ -100,8 +100,8 @@ net z-drv-target-pos      cia402.2.drv-target-position => lcec.0.1.target-positi
 
 # homing
 net z-home-request joint.2.request-servo-homing => cia402.2.home
-net z-homing joint.2.servo-is-homing <= cia402.2.stat-homed 
-net z-homed joint.2.servo-finished-homing <= cia402.2.stat-homing 
+net z-homing joint.2.servo-is-homing <= cia402.2.stat-homing
+net z-homed joint.2.servo-finished-homing <= cia402.2.stat-homed
 
 #*******************
 #  AXIS A
@@ -128,5 +128,5 @@ net z-homed joint.2.servo-finished-homing <= cia402.2.stat-homing
 
 # homing
 #net a-home-request joint.3.request-servo-homing => cia402.3.home
-#net a-homing joint.3.servo-is-homing <= cia402.3.stat-homed 
-#net a-homed joint.3.servo-finished-homing <= cia402.3.stat-homing 
+#net a-homing joint.3.servo-is-homing <= cia402.3.stat-homing
+#net a-homed joint.3.servo-finished-homing <= cia402.3.stat-homed
