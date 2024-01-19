@@ -172,8 +172,8 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 
       case CUSTOM_2:
           rtapi_print("quick delay to let the servo drive react");
-		  for (c = 1; c <= 32767; c++)
-			   for (d = 1; d <= 32767; d++)
+		  for (int c = 1; c <= 32767; c++)
+			   for (int d = 1; d <= 32767; d++)
 			   {}
           break;
 
