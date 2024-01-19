@@ -246,7 +246,6 @@ FUNCTION(read_all) {
 }
 
 FUNCTION(write_all) {
-  rtapi_print("write_all function \n");
   int enable_edge;
 
   //init opmode
