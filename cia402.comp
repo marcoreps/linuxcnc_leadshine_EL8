@@ -233,11 +233,14 @@ FUNCTION(read_all) {
 
   //home states  
   if (opmode_homing) {
-	rtapi_print("servo home delay step: %d\n",home_servo_delay);
-    if (!home_servo_delay)
-		stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
-	else
-		home_servo_delay--;
+	
+	if (((statusword >> 10) & 1) && ((statusword >> 12) & 1))
+		if (!home_servo_delay){
+			stat_homed    = 1;
+			rtapi_print("servo home delay step: %d\n",home_servo_delay);
+		}
+		else
+			home_servo_delay--;
     stat_homing   = !stat_homed && !((statusword >> 10) & 1);
   }
 
