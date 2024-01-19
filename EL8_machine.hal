@@ -127,7 +127,6 @@ net z-homed joint.2.servo-finished-homing <= cia402.2.stat-homing
 #net a-drv-target-pos      cia402.3.drv-target-position => lcec.0.0.target-position
 
 # homing
-net a-home-request joint.3.request-servo-homing => cia402.3.home
-net a-homing joint.3.servo-is-homing <= cia402.3.stat-homed 
-net a-homed joint.3.servo-finished-homing <= cia402.3.stat-homing 
-
+#net a-home-request joint.3.request-servo-homing => cia402.3.home
+#net a-homing joint.3.servo-is-homing <= cia402.3.stat-homed 
+#net a-homed joint.3.servo-finished-homing <= cia402.3.stat-homing 
