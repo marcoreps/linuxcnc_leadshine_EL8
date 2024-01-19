@@ -169,14 +169,21 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
           customH[joint_num].request_servo_homing = 1;
           chomestate[joint_num] = CUSTOM_2;
           break;
-                
+
       case CUSTOM_2:
+          rtapi_print("quick delay to let the servo drive react");
+		  for (c = 1; c <= 32767; c++)
+			   for (d = 1; d <= 32767; d++)
+			   {}
+          break;
+
+      case CUSTOM_3:
           rtapi_print("checking if the servo has heard");
           if (customH[joint_num].servo_is_homing)
-              chomestate[joint_num] = CUSTOM_3;
+              chomestate[joint_num] = CUSTOM_4;
           break;
           
-      case CUSTOM_3:
+      case CUSTOM_4:
           rtapi_print("servo has heard and should be homing now");
           if (customH[joint_num].servo_finished_homing)
               nextcstate=CUSTOM_FINI;
