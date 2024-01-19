@@ -309,7 +309,8 @@ FUNCTION(write_all) {
   // mode Home and start homing
   if (home) {
     opmode = OPMODE_HOMING;
-    controlword |= (home << 4);  
+    if (opmode_homing)
+	  controlword |= (home << 4); 
   }
 }
 
