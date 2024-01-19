@@ -248,6 +248,9 @@ FUNCTION(read_all) {
 }
 
 FUNCTION(write_all) {
+  if (home)
+    rtapi_print("write_all() \n");
+
   int enable_edge;
 
   //init opmode
