@@ -114,7 +114,7 @@ pin out float velocity_fb "Velocity feedback scaled";
 pin out bit drv_fault     "true indicates an Drive Error";
 
 //Homing IOs
-pin in  bit home        "true starts the Drives internal home procedure, connect this to joint.x.index-enable pin";
+pin io  bit home        "true starts the Drives internal home procedure, connect this to joint.x.index-enable pin";
 pin out bit stat_homed  "true indicates that the Drive is internaly homed";
 pin out bit stat_homing "true indicates that the Drives homing procedure is running";
 //Auxilary IOs
@@ -246,6 +246,7 @@ FUNCTION(read_all) {
 }
 
 FUNCTION(write_all) {
+  rtapi_print("write_all function \n");
   int enable_edge;
 
   //init opmode
@@ -261,6 +262,7 @@ FUNCTION(write_all) {
   // write control register
   controlword = (1 << 2); // quick stop is not supported
   if (stat_fault) {
+	rtapi_print("home is disabled because of fault");
     home = 0; 
     if (fault_reset) {
       controlword |= (1 << 7); // fault reset
@@ -288,6 +290,7 @@ FUNCTION(write_all) {
 
   // reset home command   
   if (home && (stat_homed && !stat_homed_old) && opmode_homing) {
+	rtapi_print("home is disabled because of reset home command \n");
     home = 0;
   }
   stat_homed_old = stat_homed;  
