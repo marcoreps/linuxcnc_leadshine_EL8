@@ -1,4 +1,4 @@
-component el8_homecomp"homing module template";
+component homecomp"homing module template";
 
 description """
 Example of a homing module buildable with halcompile.
@@ -49,6 +49,12 @@ option  homemod;
 option  extra_setup;
 ;;
 
+/* To incorporate default homing.c file from a local git src tree:
+** enable #define HOMING_BASE set to the path to the current homing.c file.
+** (Note: CUSTOM_HOMEMODULE precludes duplicate api symbols)
+** (Edit myname as required for valid path)
+*/
+
 #define HOMING_BASE /home/cnc/linuxcnc-dev/src/emc/motion/homing.c
 
 #define STR(s)  #s
@@ -63,10 +69,20 @@ RTAPI_MP_STRING(home_parms,"Example home parms");
 // EXTRA_SETUP is executed before rtapi_app_main()
 EXTRA_SETUP() {
     if (!home_parms) {home_parms = "no_home_parms";}
+    rtapi_print("@@@%s:%s: home_parms=%s\n",__FILE__,__FUNCTION__,home_parms);
+#ifndef HOMING_BASE
+    rtapi_print("\n!!!%s: Skeleton Homing Module\n\n",__FILE__);
+#else
+    rtapi_print("\n!!!%s: HOMING_BASE=%s\n"
+                "!!!Customize using hal pin(s): joint.N.request-custom-homing\n"
+                ,__FILE__,XSTR(HOMING_BASE));
+#endif
+
     return 0;
 }
 
 //=====================================================================
+#ifdef  HOMING_BASE  // { begin CUSTOM example
 #define USE_HOMING_BASE XSTR(HOMING_BASE)
 
 // NOTE: CUSTOM_HOMEMODULE: disables duplicate symbols sourced from homing.c
@@ -74,18 +90,16 @@ EXTRA_SETUP() {
 #include USE_HOMING_BASE
 
 typedef struct {
-    bool request_servo_homing;
-    bool servo_is_homing;
-    bool servo_finished_homing;
+    bool request_custom_homing;
+    bool is_custom_homing;
 } custom_home_local_data;
 
 static custom_home_local_data customH[EMCMOT_MAX_JOINTS];
 
 // data for per-joint custom-homing-specific hal pins:
 typedef struct {
-    hal_bit_t *request_servo_homing;   // output requests servo drive homing
-    hal_bit_t *servo_is_homing;        // input from servo drive during homing
-    hal_bit_t *servo_finished_homing;  // input from servo drive after homing
+    hal_bit_t *request_custom_homing; // input  requests custom homing
+    hal_bit_t *is_custom_homing;      // output verifies custom homing
 } custom_one_joint_home_data_t;
 
 typedef struct {
@@ -109,12 +123,10 @@ static int custom_makepins(int id,int njoints)
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
 
-        retval += hal_pin_bit_newf(HAL_IO, &(addr->request_servo_homing), id,
-                                  "joint.%d.request-servo-homing", jno);
-        retval += hal_pin_bit_newf(HAL_IN, &(addr->servo_is_homing), id,
-                                  "joint.%d.servo-is-homing", jno);
-        retval += hal_pin_bit_newf(HAL_IN, &(addr->servo_finished_homing), id,
-                                  "joint.%d.servo-finished-homing", jno);
+        retval += hal_pin_bit_newf(HAL_IN, &(addr->request_custom_homing), id,
+                                  "joint.%d.request-custom-homing", jno);
+        retval += hal_pin_bit_newf(HAL_OUT, &(addr->is_custom_homing), id,
+                                  "joint.%d.is-custom-homing", jno);
     }
     return retval;
 } // custom_makepins()
@@ -125,8 +137,10 @@ static void custom_read_homing_in_pins(int njoints)
     custom_one_joint_home_data_t *addr;
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
-        customH[jno].servo_is_homing = *(addr->servo_is_homing);             // IN
-        customH[jno].servo_finished_homing = *(addr->servo_finished_homing); // IN
+        customH[jno].request_custom_homing = *(addr->request_custom_homing); // IN
+
+        // echo for verification:
+        customH[jno].is_custom_homing = customH[jno].request_custom_homing;
     }
 }
 
@@ -136,7 +150,7 @@ static void custom_write_homing_out_pins(int njoints)
     custom_one_joint_home_data_t *addr;
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
-        *(addr->request_servo_homing) = customH[jno].request_servo_homing; // OUT
+        *(addr->is_custom_homing) = customH[jno].is_custom_homing; // OUT
     }
 }
 
@@ -154,6 +168,11 @@ typedef enum {
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
        custom_home_state_t nextcstate;
 
+#define C_SHOW \
+    rtapi_print("H[%d].homed=%d,homing=%d,home_state=%d chomestate[%d]=%d next=%d\n" \
+      ,joint_num,H[joint_num].homed,H[joint_num].homing,H[joint_num].home_state \
+      ,joint_num,chomestate[joint_num],nextcstate);
+
     if ( H[joint_num].home_state == HOME_IDLE) return 0; // nothing to do
 
     if ((H[joint_num].home_state == HOME_START) && (chomestate[joint_num] == CUSTOM_IDLE) ) {
@@ -161,35 +180,24 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         H[joint_num].homed  = 0;
         chomestate[joint_num] = CUSTOM_1; // set first non-idle custom_home_state
     }
-
+    // For this example, just walk thru custom_home_states with prints.
+    // Note: remains in the base home_state: HOME_START for all custom_home_states.
+    //       On completion, return to HOME_IDLE, CUSTOM_IDLE states.
     switch (chomestate[joint_num]) {
-        
       case CUSTOM_1:
-          rtapi_print("state machine started \n");
-          customH[joint_num].request_servo_homing = 1;
-          chomestate[joint_num] = CUSTOM_2;
-          break;
-
-
-      case CUSTOM_2:
-          rtapi_print("checking if the servo has heard \n");
-          if (customH[joint_num].servo_is_homing)
-              chomestate[joint_num] = CUSTOM_3;
-          break;
-          
-      case CUSTOM_3:
-          rtapi_print("servo has heard and should be homing now \n");
-          if (customH[joint_num].servo_finished_homing)
-              nextcstate=CUSTOM_FINI;
-          break;
-      
+                     // Each CUSTOM_* state should do something and/or check something
+                     // and set nexstcstate according to the design goals.
+                     // Halpin variables can be read and/or set for next write.
+                     nextcstate=CUSTOM_2;    C_SHOW; chomestate[joint_num] = nextcstate; break;
+      case CUSTOM_2: nextcstate=CUSTOM_3;    C_SHOW; chomestate[joint_num] = nextcstate; break;
+      case CUSTOM_3: nextcstate=CUSTOM_4;    C_SHOW; chomestate[joint_num] = nextcstate; break;
+      case CUSTOM_4: nextcstate=CUSTOM_FINI; C_SHOW; chomestate[joint_num] = nextcstate; break;
       case CUSTOM_FINI:
-           rtapi_print("servo has finished homing yay \n");
-		   customH[joint_num].request_servo_homing = 0;
            H[joint_num].homing = 0;
            H[joint_num].homed  = 1;
            H[joint_num].home_state = HOME_IDLE;
            nextcstate = CUSTOM_IDLE;
+           C_SHOW;
            chomestate[joint_num] = nextcstate;
            return 0; // finished custom_home_states
            break;
@@ -229,7 +237,11 @@ void write_homing_out_pins(int njoints)
     custom_write_homing_out_pins(njoints);
 }
 
-
+/* do_homing() is adapted from homing.c:base_do_homing() augmented
+** with support for custom homing as specified on hal input pin:
+** joint.n.request-custom-homing and echoed on hal output pin
+** joint.n.is-custom-homing
+*/
 bool do_homing(void)
 {
     int  joint_num;
@@ -241,9 +253,14 @@ bool do_homing(void)
     for (joint_num = 0; joint_num < all_joints; joint_num++) {
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
-        
-        homing_flag += custom_1joint_state_machine(joint_num);
-        
+
+        if (customH[joint_num].is_custom_homing) {
+            // CUSTOM joint homing state machine:
+            homing_flag += custom_1joint_state_machine(joint_num);
+        } else {
+            // DEFAULT joint homing state machine:
+            homing_flag += base_1joint_state_machine(joint_num);
+        }
     }
     if ( homing_flag > 0 ) { /* one or more joint is homing */
         homing_active = 1;
@@ -307,7 +324,102 @@ void update_joint_homing_params(int    jno,
                                       home_sequence
                                       );
 }
+//           end   CUSTOM example
+//=====================================================================
+#else // } { begin SKELETON example minimal api implementation
+static emcmot_joint_t  *joints;
 
+// data for per-joint homing-specific hal pins:
+typedef struct {
+    hal_bit_t *home_sw;      // home switch input
+    hal_bit_t *homing;       // joint is homing
+    hal_bit_t *homed;        // joint was homed
+    hal_bit_t *index_enable; // motmod sets: request reset on index
+                             //        encoder clears: index arrived
+    hal_s32_t *home_state;   // homing state machine state
+} one_joint_home_data_t;
+
+typedef struct {
+    one_joint_home_data_t jhd[EMCMOT_MAX_JOINTS];
+} all_joints_home_data_t;
+
+static all_joints_home_data_t *joint_home_data = 0;
+
+static int makepins(int id,int njoints)
+{
+    // home_pins needed to work with configs expecting them:
+    int jno,retval;
+    one_joint_home_data_t *addr;
+
+    joint_home_data = hal_malloc(sizeof(all_joints_home_data_t));
+    if (joint_home_data == 0) {
+        rtapi_print_msg(RTAPI_MSG_ERR, "HOMING: all_joints_home_data_t malloc failed\n");
+        return -1;
+    }
+
+    retval = 0;
+    for (jno = 0; jno < njoints; jno++) {
+        addr = &(joint_home_data->jhd[jno]);
+
+        retval += hal_pin_bit_newf(HAL_IN, &(addr->home_sw), id,
+                                  "joint.%d.home-sw-in", jno);
+        retval += hal_pin_bit_newf(HAL_OUT, &(addr->homing), id,
+                                  "joint.%d.homing", jno);
+        retval += hal_pin_bit_newf(HAL_OUT, &(addr->homed), id,
+                                  "joint.%d.homed", jno);
+        retval += hal_pin_s32_newf(HAL_OUT, &(addr->home_state), id,
+                                  "joint.%d.home-state", jno);
+        retval += hal_pin_bit_newf(HAL_IO, &(addr->index_enable), id,
+                                  "joint.%d.index-enable", jno);
+    }
+    return retval;
+}
+// All (skeleton) functions required for homing api follow:
+void homeMotFunctions(void(*pSetRotaryUnlock)(int,int)
+                     ,int (*pGetRotaryIsUnlocked)(int)
+                     )
+{ return; }
+
+int  homing_init(int id,
+                 double servo_period,
+                 int n_joints,
+                 int n_extrajoints,
+                 emcmot_joint_t* pjoints) {
+     joints = pjoints;
+     return makepins(id,n_joints);
+}
+bool do_homing(void)                                 {return 1;}
+bool get_allhomed()                                  {return 1;}
+bool get_homed(int jno)                              {return 1;}
+bool get_home_is_idle(int jno)                       {return 1;}
+bool get_home_is_synchronized(int jno)               {return 0;}
+bool get_home_needs_unlock_first(int jno)            {return 0;}
+int  get_home_sequence(int jno)                      {return 0;}
+bool get_homing(int jno)                             {return 0;}
+bool get_homing_at_index_search_wait(int jno)        {return 0;}
+bool get_homing_is_active()                          {return 0;}
+bool get_index_enable(int jno)                       {return 0;}
+void read_homing_in_pins(int njoints)                {return;}
+void do_home_joint(int jno)                          {return;}
+void set_unhomed(int jno,motion_state_t motstate)    {return;}
+void do_cancel_homing(int jno)                       {return;}
+void set_joint_homing_params(int    jno,
+                             double offset,
+                             double home,
+                             double home_final_vel,
+                             double home_search_vel,
+                             double home_latch_vel,
+                             int    home_flags,
+                             int    home_sequence,
+                             bool   volatile_home
+                             )                       {return;}
+void update_joint_homing_params (int    jno,
+                                 double offset,
+                                 double home,
+                                 int    home_sequence
+                                )                    {return;}
+void write_homing_out_pins(int njoints)              {return;}
+#endif  // } end SKELETON example minimal api implementation
 //=====================================================================
 
 // all home functions for homing api
