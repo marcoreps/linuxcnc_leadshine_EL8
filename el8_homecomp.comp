@@ -155,8 +155,8 @@ typedef enum {
     CUSTOM_2    = 2,
     CUSTOM_3    = 3,
 	CUSTOM_4    = 4,
-    CUSTOM_FINI = 5,
-	CUSTOM_FINI = 6,
+    CUSTOM_5    = 5,
+	CUSTOM_6    = 6,
 	CUSTOM_FINI = 7,
 } custom_home_state_t;
 
