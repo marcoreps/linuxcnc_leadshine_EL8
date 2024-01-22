@@ -152,6 +152,7 @@ variable double velo_scale_rcpt;
 variable bool pos_mode;
 variable bool init_pos_mode = 0;
 variable long auto_fault_reset_delay;
+variable int stat_homed_delay_counter = 0;
 
 //declare functions
 function read_all;
@@ -236,8 +237,14 @@ FUNCTION(read_all) {
 
   //home states  
 if (opmode_homing) {
-		rtapi_print("we are in opmode_homing \n");
-    stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
+	rtapi_print("we are in opmode_homing \n");
+	
+	if (((statusword >> 10) & 1) && ((statusword >> 12) & 1)){
+		if (stat_homed_delay_counter > 100)
+			stat_homed = 1;
+		stat_homed_delay_counter++;
+	}
+    //stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
     stat_homing   = !stat_homed && !((statusword >> 10) & 1);
   }
   
@@ -308,6 +315,7 @@ FUNCTION(write_all) {
   // reset home command   
   if (home && (stat_homed && !stat_homed_old) && opmode_homing) {
 	rtapi_print("home is disabled because of reset home command \n");
+	stat_homed_delay_counter = 0;
     home = 0;
   }
   stat_homed_old = stat_homed;  
@@ -326,8 +334,7 @@ FUNCTION(write_all) {
 
 	rtapi_print("homing pin seen! \n");
     opmode = OPMODE_HOMING;
-	if (opmode_homing)
-		controlword |= (home << 4); 
+    controlword |= (home << 4); 
 
   }
   
