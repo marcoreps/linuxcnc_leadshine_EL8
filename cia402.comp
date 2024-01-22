@@ -153,7 +153,6 @@ variable bool pos_mode;
 variable bool init_pos_mode = 0;
 variable long auto_fault_reset_delay;
 variable int stat_homed_delay_counter = 0;
-variable int bit_4_delay_counter = 100;
 
 //declare functions
 function read_all;
@@ -336,10 +335,8 @@ FUNCTION(write_all) {
 
 	//rtapi_print("homing pin seen! \n");
     opmode = OPMODE_HOMING;
-	if (opmode_homing){
-		if (bit_4_delay_counter < 1)
-			controlword |= (home << 4); 
-		bit_4_delay_counter--;
+	if (opmode_homing)
+	  controlword |= (home << 4);
 		
 	}
     
