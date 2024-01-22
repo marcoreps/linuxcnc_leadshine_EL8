@@ -263,12 +263,10 @@ bool do_homing(void)
 
         // CUSTOM joint homing state machine for everybody:
         homing_flag += custom_1joint_state_machine(joint_num);
-        if (customH[joint_num].custom_homing_finished){
-			// One last custom state machine to clean up
-			homing_flag += custom_1joint_state_machine(joint_num);
+        if (!customH[joint_num].request_custom_homing)
             // DEFAULT joint homing state machine when custom is finished:
             homing_flag += base_1joint_state_machine(joint_num);
-		}
+		
 
 
 
