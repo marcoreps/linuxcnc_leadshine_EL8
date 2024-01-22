@@ -157,9 +157,9 @@ typedef enum {
 	CUSTOM_4    = 4,
     CUSTOM_5    = 5,
 	CUSTOM_6    = 6,
-	CUSTOM_FINI = 7,
-	CUSTOM_FINI = 8,
-	CUSTOM_FINI = 9,
+	CUSTOM_7    = 7,
+	CUSTOM_8    = 8,
+	CUSTOM_9    = 9,
 } custom_home_state_t;
 
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
