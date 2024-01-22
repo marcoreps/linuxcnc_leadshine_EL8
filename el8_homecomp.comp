@@ -207,7 +207,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 		
       case CUSTOM_3:
 		chomestate[joint_num] = CUSTOM_4;
-		rtapi_print("%d \n", customH[joint_num].free_tp.curr_pos);
+		rtapi_print("%d \n", H[joint_num].free_tp.curr_pos);
         break;
 		
 	case CUSTOM_4:
@@ -233,7 +233,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 	case CUSTOM_9:
 		chomestate[joint_num] = CUSTOM_10;
 		rtapi_print("10 \n");
-		rtapi_print("%d \n", customH[joint_num].free_tp.curr_pos);
+		rtapi_print("%d \n", H[joint_num].free_tp.curr_pos);
         break;
 				
 	case CUSTOM_10:
@@ -279,7 +279,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 	case CUSTOM_20:
 		chomestate[joint_num] = CUSTOM_21;
 		rtapi_print("20 \n");
-		rtapi_print("%d \n", customH[joint_num].free_tp.curr_pos);
+		rtapi_print("%d \n", H[joint_num].free_tp.curr_pos);
         break;
 				
 	case CUSTOM_21:
@@ -317,7 +317,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 	case CUSTOM_29:
 		chomestate[joint_num] = CUSTOM_FINI;
 		rtapi_print("29 \n");
-		rtapi_print("%d \n", customH[joint_num].free_tp.curr_pos);
+		rtapi_print("%d \n", H[joint_num].free_tp.curr_pos);
         break;
 		
       case CUSTOM_FINI:
