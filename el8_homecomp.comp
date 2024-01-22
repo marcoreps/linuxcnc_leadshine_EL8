@@ -261,13 +261,9 @@ bool do_homing(void)
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
 
-        if (customH[joint_num].is_custom_homing) {
-            // CUSTOM joint homing state machine:
-            homing_flag += custom_1joint_state_machine(joint_num);
-        } else {
-            // DEFAULT joint homing state machine:
-            homing_flag += base_1joint_state_machine(joint_num);
-        }
+        // CUSTOM joint homing state machine:
+        homing_flag += custom_1joint_state_machine(joint_num);
+
     }
     if ( homing_flag > 0 ) { /* one or more joint is homing */
         homing_active = 1;
