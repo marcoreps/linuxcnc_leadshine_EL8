@@ -68,15 +68,6 @@ RTAPI_MP_STRING(home_parms,"Example home parms");
 
 // EXTRA_SETUP is executed before rtapi_app_main()
 EXTRA_SETUP() {
-    if (!home_parms) {home_parms = "no_home_parms";}
-    rtapi_print("@@@%s:%s: home_parms=%s\n",__FILE__,__FUNCTION__,home_parms);
-#ifndef HOMING_BASE
-    rtapi_print("\n!!!%s: Skeleton Homing Module\n\n",__FILE__);
-#else
-    rtapi_print("\n!!!%s: HOMING_BASE=%s\n"
-                "!!!Customize using hal pin(s): joint.N.request-custom-homing\n"
-                ,__FILE__,XSTR(HOMING_BASE));
-#endif
 
     return 0;
 }
@@ -184,14 +175,14 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_1:
         rtapi_print("state machine started \n");
         customH[joint_num].request_custom_homing = 1;
-        chomestate[joint_num] = CUSTOM_2;
+        chomestate[joint_num] = CUSTOM_3;
         break;
 		
-      case CUSTOM_2:
-	    rtapi_print("checking if the servo has heard \n");
-        if (customH[joint_num].is_custom_homing)
-          chomestate[joint_num] = CUSTOM_3;
-        break;
+    //  case CUSTOM_2:
+	//    rtapi_print("checking if the servo has heard \n");
+    //    if (customH[joint_num].is_custom_homing)
+    //      chomestate[joint_num] = CUSTOM_3;
+    //    break;
 		
       case CUSTOM_3:
         rtapi_print("servo has heard and should be homing now \n");
