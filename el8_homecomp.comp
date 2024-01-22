@@ -156,6 +156,8 @@ typedef enum {
     CUSTOM_3    = 3,
 	CUSTOM_4    = 4,
     CUSTOM_FINI = 5,
+	CUSTOM_FINI = 6,
+	CUSTOM_FINI = 7,
 } custom_home_state_t;
 
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
@@ -187,13 +189,22 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_3:
         rtapi_print("servo has heard and should be homing now \n");
         if (customH[joint_num].custom_homing_finished)
-          chomestate[joint_num] = CUSTOM_4;
+			chomestate[joint_num] = CUSTOM_4;
         break;
 		
       case CUSTOM_4:
-        rtapi_print("servo has finished homing yay \n");
-		customH[joint_num].request_custom_homing = 0;
-          chomestate[joint_num] = CUSTOM_FINI;
+        rtapi_print("just a small delay , don't worry about it \n");
+	    chomestate[joint_num] = CUSTOM_5;
+        break;
+		
+      case CUSTOM_5:
+        rtapi_print("probably not even necessary \n");
+	    chomestate[joint_num] = CUSTOM_6;
+        break;
+		
+      case CUSTOM_6:
+        rtapi_print("this delay is sponsored by pcbway \n");
+        chomestate[joint_num] = CUSTOM_FINI;
         break;
 		  
       case CUSTOM_FINI:
