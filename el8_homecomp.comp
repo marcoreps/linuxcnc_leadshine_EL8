@@ -270,9 +270,11 @@ bool do_homing(void)
 
         // CUSTOM joint homing state machine for everybody:
         homing_flag += custom_1joint_state_machine(joint_num);
-        if (customH[joint_num].custom_homing_finished)
+        if (customH[joint_num].custom_homing_finished){
             // DEFAULT joint homing state machine when custom is finished:
+			rtapi_print("based homing ritual is conducted now \n");
             homing_flag += base_1joint_state_machine(joint_num);
+		}
 		
 
     }
