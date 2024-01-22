@@ -92,7 +92,6 @@ EXTRA_SETUP() {
 typedef struct {
     bool request_custom_homing;
     bool is_custom_homing;
-	bool custom_homing_flag;
 	bool custom_homing_finished;
 } custom_home_local_data;
 
@@ -102,7 +101,6 @@ static custom_home_local_data customH[EMCMOT_MAX_JOINTS];
 typedef struct {
     hal_bit_t *request_custom_homing;   // output requests custom homing
     hal_bit_t *is_custom_homing;        // input verifies custom homing
-	hal_bit_t *custom_homing_flag;
     hal_bit_t *custom_homing_finished;  // input from servo drive after homing
 } custom_one_joint_home_data_t;
 
@@ -131,8 +129,6 @@ static int custom_makepins(int id,int njoints)
                                   "joint.%d.request-custom-homing", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->is_custom_homing), id,
                                   "joint.%d.is-custom-homing", jno);
-        retval += hal_pin_bit_newf(HAL_OUT, &(addr->custom_homing_flag), id,
-                                  "joint.%d.custom-homing-flag", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->custom_homing_finished), id,
                                   "joint.%d.custom-homing-finished", jno);
     }
@@ -157,7 +153,6 @@ static void custom_write_homing_out_pins(int njoints)
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
         *(addr->request_custom_homing) = customH[jno].request_custom_homing; // OUT
-		*(addr->custom_homing_flag) = customH[jno].custom_homing_flag; // OUT
     }
 }
 
@@ -206,7 +201,6 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_FINI:
         rtapi_print("servo has finished homing yay \n");
 		customH[joint_num].request_custom_homing = 0;
-		customH[joint_num].custom_homing_flag = 1;
         H[joint_num].homing = 0;
         H[joint_num].homed  = 1;
         H[joint_num].home_state = HOME_IDLE;
@@ -267,10 +261,9 @@ bool do_homing(void)
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
 
-        customH[joint_num].custom_homing_flag = 0;
         // CUSTOM joint homing state machine for everybody:
         homing_flag += custom_1joint_state_machine(joint_num);
-        if (customH[joint_num].custom_homing_flag)
+        if (customH[joint_num].custom_homing_finished)
             // DEFAULT joint homing state machine when custom is finished:
             homing_flag += base_1joint_state_machine(joint_num);
 
