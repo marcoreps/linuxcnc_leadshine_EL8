@@ -43,7 +43,7 @@ https://github.com/LinuxCNC/linuxcnc/blob/BRANCHNAME/src/hal/components/homecomp
 
 pin out bit is_module=1; //one pin is required to use halcompile)
 
-variable int custom_delay = 100;
+variable int custom_delay;
 
 license "GPL";
 author "Dewey Garrett";
@@ -70,7 +70,7 @@ RTAPI_MP_STRING(home_parms,"Example home parms");
 
 // EXTRA_SETUP is executed before rtapi_app_main()
 EXTRA_SETUP() {
-
+	custom_delay = 100;
     return 0;
 }
 
@@ -156,7 +156,33 @@ typedef enum {
     CUSTOM_1    = 1,
     CUSTOM_2    = 2,
     CUSTOM_3    = 3,
-	CUSTOM_FINI = 4,
+	CUSTOM_4    = 4,
+	CUSTOM_5    = 5,
+	CUSTOM_6    = 6,
+	CUSTOM_7    = 7,
+	CUSTOM_8    = 8,
+	CUSTOM_9    = 9,
+	CUSTOM_10    = 10,
+	CUSTOM_11    = 11,
+	CUSTOM_12    = 12,
+	CUSTOM_13    = 13,
+	CUSTOM_14    = 14,
+	CUSTOM_15    = 15,
+	CUSTOM_16    = 16,
+	CUSTOM_17    = 17,
+	CUSTOM_18    = 18,
+	CUSTOM_19    = 19,
+	CUSTOM_20    = 20,
+	CUSTOM_21    = 21,
+	CUSTOM_22    = 22,
+	CUSTOM_23    = 23,
+	CUSTOM_24    = 24,
+	CUSTOM_25    = 25,
+	CUSTOM_26    = 26,
+	CUSTOM_27    = 27,
+	CUSTOM_28    = 28,
+	CUSTOM_29    = 29,
+	CUSTOM_FINI  = 30,
 } custom_home_state_t;
 
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
@@ -173,7 +199,6 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
     switch (chomestate[joint_num]) {
       case CUSTOM_1:
         rtapi_print("state machine started \n");
-		fperiod;
         customH[joint_num].request_custom_homing = 1;
         chomestate[joint_num] = CUSTOM_2;
         break;
@@ -184,7 +209,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         break;
 		
       case CUSTOM_3:
-		if (fperiod > 1)
+		if (custom_delay > 1)
 			chomestate[joint_num] = CUSTOM_FINI;
         break;
 		

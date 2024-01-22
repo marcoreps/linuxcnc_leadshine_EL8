@@ -152,7 +152,7 @@ variable double velo_scale_rcpt;
 variable bool pos_mode;
 variable bool init_pos_mode = 0;
 variable long auto_fault_reset_delay;
-variable int stat_homed_delay = 100;
+variable int stat_homed_delay;
 
 //declare functions
 function read_all;
@@ -178,6 +178,7 @@ EXTRA_SETUP ()  {
   velo_scale_rcpt = 1.0;
   auto_fault_reset = 1;
   csp_mode = 1; 
+  stat_homed_delay  = 100;
   return 0;
 }
 
