@@ -189,12 +189,13 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_3:
         rtapi_print("servo has heard and should be homing now \n");
         if (customH[joint_num].custom_homing_finished)
-			chomestate[joint_num] = CUSTOM_FINI;
+			chomestate[joint_num] = CUSTOM_4;
         break;
 		
       case CUSTOM_4:
         rtapi_print("just a small delay , don't worry about it \n");
-	    chomestate[joint_num] = CUSTOM_5;
+	    customH[joint_num].request_custom_homing = 0;
+	    chomestate[joint_num] = CUSTOM_FINI;
         break;
 		
       case CUSTOM_5:
@@ -208,7 +209,6 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         break;
 		  
       case CUSTOM_FINI:
-	    customH[joint_num].request_custom_homing = 0;
         H[joint_num].homing = 0;
         H[joint_num].homed  = 1;
         H[joint_num].home_state = HOME_IDLE;
