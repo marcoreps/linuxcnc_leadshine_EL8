@@ -233,8 +233,9 @@ FUNCTION(read_all) {
 
   //home states  
   if (opmode_homing) {
-    if (!--stat_homed_delay)
-		stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
+	if (((statusword >> 10) & 1) && ((statusword >> 12) & 1))
+		if (!--stat_homed_delay)
+			stat_homed    = 1;
     stat_homing   = !stat_homed && !((statusword >> 10) & 1);
   }
 
