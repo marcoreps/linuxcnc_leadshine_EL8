@@ -143,6 +143,7 @@ static void custom_read_homing_in_pins(int njoints)
         addr = &(custom_joint_home_data->custom_jhd[jno]);
         customH[jno].is_custom_homing = *(addr->is_custom_homing); // IN
 		customH[jno].custom_homing_finished = *(addr->custom_homing_finished); // IN
+		
     }
 }
 
@@ -261,9 +262,13 @@ bool do_homing(void)
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
 
-        // CUSTOM joint homing state machine for everybody:
-        homing_flag += custom_1joint_state_machine(joint_num);
-        homing_flag += base_1joint_state_machine(joint_num);
+        if (customH[joint_num].is_custom_homing) {
+            // CUSTOM joint homing state machine:
+            homing_flag += custom_1joint_state_machine(joint_num);
+        } else {
+            // DEFAULT joint homing state machine:
+            homing_flag += base_1joint_state_machine(joint_num);
+        }
     }
     if ( homing_flag > 0 ) { /* one or more joint is homing */
         homing_active = 1;
