@@ -173,7 +173,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
     switch (chomestate[joint_num]) {
       case CUSTOM_1:
         rtapi_print("state machine started \n");
-		custom_delay = 100;
+		fperiod;
         customH[joint_num].request_custom_homing = 1;
         chomestate[joint_num] = CUSTOM_2;
         break;
@@ -184,7 +184,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         break;
 		
       case CUSTOM_3:
-        if (--custom_delay < 1)
+		if (fperiod > 1)
 			chomestate[joint_num] = CUSTOM_FINI;
         break;
 		
