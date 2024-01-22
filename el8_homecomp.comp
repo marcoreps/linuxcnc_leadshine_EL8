@@ -270,8 +270,8 @@ bool do_homing(void)
         customH[joint_num].custom_homing_flag = 0;
         // CUSTOM joint homing state machine for everybody:
         homing_flag += custom_1joint_state_machine(joint_num);
-        if (custom_homing_flag)
-            // DEFAULT joint homing state machine:
+        if (customH[joint_num].custom_homing_flag)
+            // DEFAULT joint homing state machine when custom is finished:
             homing_flag += base_1joint_state_machine(joint_num);
 
 
