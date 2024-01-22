@@ -114,7 +114,7 @@ pin out float velocity_fb "Velocity feedback scaled";
 pin out bit drv_fault     "true indicates an Drive Error";
 
 //Homing IOs
-pin io bit home         "true starts the Drives internal home procedure, connect this to joint.x.index-enable pin";
+pin in bit home         "true starts the Drives internal home procedure, connect this to joint.x.index-enable pin";
 pin out bit stat_homed  "true indicates that the Drive is internaly homed";
 pin out bit stat_homing "true indicates that the Drives homing procedure is running";
 //Auxilary IOs
