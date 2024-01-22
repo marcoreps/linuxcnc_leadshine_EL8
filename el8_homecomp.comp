@@ -158,6 +158,8 @@ typedef enum {
     CUSTOM_5    = 5,
 	CUSTOM_6    = 6,
 	CUSTOM_FINI = 7,
+	CUSTOM_FINI = 8,
+	CUSTOM_FINI = 9,
 } custom_home_state_t;
 
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
@@ -177,25 +179,22 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_1:
         rtapi_print("state machine started \n");
         customH[joint_num].request_custom_homing = 1;
-        chomestate[joint_num] = CUSTOM_3;
+        chomestate[joint_num] = CUSTOM_2;
         break;
 		
       case CUSTOM_2:
-	    rtapi_print("checking if the servo has heard \n");
-        if (customH[joint_num].is_custom_homing)
+        if (customH[joint_num].custom_homing_finished)
           chomestate[joint_num] = CUSTOM_3;
         break;
 		
       case CUSTOM_3:
         rtapi_print("servo has heard and should be homing now \n");
-        if (customH[joint_num].custom_homing_finished)
-			chomestate[joint_num] = CUSTOM_4;
+		chomestate[joint_num] = CUSTOM_4;
         break;
 		
       case CUSTOM_4:
         rtapi_print("just a small delay , don't worry about it \n");
-	    customH[joint_num].request_custom_homing = 0;
-	    chomestate[joint_num] = CUSTOM_FINI;
+	    chomestate[joint_num] = CUSTOM_5;
         break;
 		
       case CUSTOM_5:
@@ -204,6 +203,21 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         break;
 		
       case CUSTOM_6:
+        rtapi_print("this delay is sponsored by pcbway \n");
+        chomestate[joint_num] = CUSTOM_7;
+        break;
+		
+      case CUSTOM_7:
+        rtapi_print("this delay is sponsored by pcbway \n");
+        chomestate[joint_num] = CUSTOM_8;
+        break;
+		
+      case CUSTOM_8:
+        rtapi_print("this delay is sponsored by pcbway \n");
+        chomestate[joint_num] = CUSTOM_9;
+        break;
+		
+      case CUSTOM_9:
         rtapi_print("this delay is sponsored by pcbway \n");
         chomestate[joint_num] = CUSTOM_FINI;
         break;
@@ -216,6 +230,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         return 0; // finished custom_home_states
         break;
       case CUSTOM_IDLE:
+	    customH[joint_num].request_custom_homing = 0;
       default: rtapi_print("Unhandled custom_home_state: %d\n",chomestate[joint_num]);
     }
     return 1; // return 1 if busy
