@@ -92,6 +92,7 @@ EXTRA_SETUP() {
 typedef struct {
     bool request_custom_homing;
     bool is_custom_homing;
+	bool custom_homing_finished;
 } custom_home_local_data;
 
 static custom_home_local_data customH[EMCMOT_MAX_JOINTS];
