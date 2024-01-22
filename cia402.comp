@@ -338,7 +338,7 @@ FUNCTION(write_all) {
 	if (opmode_homing)
 	  controlword |= (home << 4);
 		
-	}
+
     
 
   }
