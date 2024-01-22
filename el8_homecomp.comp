@@ -1,4 +1,4 @@
-component homecomp"homing module template";
+component el8_homecomp"homing module template";
 
 description """
 Example of a homing module buildable with halcompile.
@@ -129,7 +129,7 @@ static int custom_makepins(int id,int njoints)
         retval += hal_pin_bit_newf(HAL_IN, &(addr->is_custom_homing), id,
                                   "joint.%d.is-custom-homing", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->custom_homing_finished), id,
-                                  "joint.%d.servo-finished-homing", jno);
+                                  "joint.%d.custom-homing-finished", jno);
     }
     return retval;
 } // custom_makepins()
@@ -181,25 +181,25 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
     switch (chomestate[joint_num]) {
       case CUSTOM_1:
         rtapi_print("state machine started \n");
-        customH[joint_num].request_servo_homing = 1;
+        customH[joint_num].request_custom_homing = 1;
         chomestate[joint_num] = CUSTOM_2;
         break;
 		
       case CUSTOM_2:
 	    rtapi_print("checking if the servo has heard \n");
-        if (customH[joint_num].servo_is_homing)
+        if (customH[joint_num].is_custom_homing)
           chomestate[joint_num] = CUSTOM_3;
         break;
 		
       case CUSTOM_3:
         rtapi_print("servo has heard and should be homing now \n");
-        if (customH[joint_num].servo_finished_homing)
+        if (customH[joint_num].custom_homing_finished)
           nextcstate=CUSTOM_FINI;
         break;
 		  
       case CUSTOM_FINI:
         rtapi_print("servo has finished homing yay \n");
-		customH[joint_num].request_servo_homing = 0;
+		customH[joint_num].request_custom_homing = 0;
         H[joint_num].homing = 0;
         H[joint_num].homed  = 1;
         H[joint_num].home_state = HOME_IDLE;

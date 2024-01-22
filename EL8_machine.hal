@@ -43,9 +43,9 @@ net x-modes-of-operation  cia402.0.opmode              => lcec.0.3.opmode
 net x-drv-target-pos      cia402.0.drv-target-position => lcec.0.3.target-position
 
 # homing
-net x-home-request joint.0.request-servo-homing => cia402.0.home
-net x-homing joint.0.servo-is-homing <= cia402.0.stat-homing
-net x-homed joint.0.servo-finished-homing <= cia402.0.stat-homed
+net x-home-request joint.0.request-custom-homing => cia402.0.home
+net x-homing joint.0.is-custom-homing <= cia402.0.stat-homing
+net x-homed joint.0.custom-homing-finished <= cia402.0.stat-homed
 
 #*******************
 #  AXIS Y
@@ -71,9 +71,9 @@ net y-modes-of-operation  cia402.1.opmode              => lcec.0.2.opmode
 net y-drv-target-pos      cia402.1.drv-target-position => lcec.0.2.target-position
 
 # homing
-net y-home-request joint.1.request-servo-homing => cia402.1.home
-net y-homing joint.1.servo-is-homing <= cia402.1.stat-homing 
-net y-homed joint.1.servo-finished-homing <= cia402.1.stat-homed
+net y-home-request joint.1.request-custom-homing => cia402.1.home
+net y-homing joint.1.is-custom-homing <= cia402.1.stat-homing 
+net y-homed joint.1.custom-homing-finished <= cia402.1.stat-homed
 
 #*******************
 #  AXIS Z
@@ -99,9 +99,9 @@ net z-modes-of-operation  cia402.2.opmode              => lcec.0.1.opmode
 net z-drv-target-pos      cia402.2.drv-target-position => lcec.0.1.target-position
 
 # homing
-net z-home-request joint.2.request-servo-homing => cia402.2.home
-net z-homing joint.2.servo-is-homing <= cia402.2.stat-homing
-net z-homed joint.2.servo-finished-homing <= cia402.2.stat-homed
+net z-home-request joint.2.request-custom-homing => cia402.2.home
+net z-homing joint.2.is-custom-homing <= cia402.2.stat-homing
+net z-homed joint.2.custom-homing-finished <= cia402.2.stat-homed
 
 #*******************
 #  AXIS A
@@ -127,6 +127,6 @@ net z-homed joint.2.servo-finished-homing <= cia402.2.stat-homed
 #net a-drv-target-pos      cia402.3.drv-target-position => lcec.0.0.target-position
 
 # homing
-#net a-home-request joint.3.request-servo-homing => cia402.3.home
-#net a-homing joint.3.servo-is-homing <= cia402.3.stat-homing
-#net a-homed joint.3.servo-finished-homing <= cia402.3.stat-homed
+#net a-home-request joint.3.request-custom-homing => cia402.3.home
+#net a-homing joint.3.is-custom-homing <= cia402.3.stat-homing
+#net a-homed joint.3.custom-homing-finished <= cia402.3.stat-homed
