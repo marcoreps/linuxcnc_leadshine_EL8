@@ -228,10 +228,11 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
         H[joint_num].homed  = 1;
         H[joint_num].home_state = HOME_IDLE;
         chomestate[joint_num] = CUSTOM_IDLE;
+		customH[joint_num].request_custom_homing = 0;
         return 0; // finished custom_home_states
         break;
       case CUSTOM_IDLE:
-	    customH[joint_num].request_custom_homing = 0;
+	    
       default: rtapi_print("Unhandled custom_home_state: %d\n",chomestate[joint_num]);
     }
     return 1; // return 1 if busy
