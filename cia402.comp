@@ -114,7 +114,7 @@ pin out float velocity_fb "Velocity feedback scaled";
 pin out bit drv_fault     "true indicates an Drive Error";
 
 //Homing IOs
-pin io  bit home        "true starts the Drives internal home procedure, connect this to joint.x.index-enable pin";
+pin io bit home         "true starts the Drives internal home procedure, connect this to joint.x.index-enable pin";
 pin out bit stat_homed  "true indicates that the Drive is internaly homed";
 pin out bit stat_homing "true indicates that the Drives homing procedure is running";
 //Auxilary IOs
@@ -152,7 +152,7 @@ variable double velo_scale_rcpt;
 variable bool pos_mode;
 variable bool init_pos_mode = 0;
 variable long auto_fault_reset_delay;
-variable int stat_homed_delay_counter = 0;
+variable int stat_homed_delay = 100;
 
 //declare functions
 function read_all;
@@ -197,9 +197,6 @@ void check_scales(hal_float_t *scale,float *scale_old, double *scale_rcpt) {
 }
   
 FUNCTION(read_all) {
-		//if (home)
-		//rtapi_print("read_all() \n");
-
 
   // check for change in scale value
   check_scales(&pos_scale, &pos_scale_old, &pos_scale_rcpt);
@@ -234,26 +231,12 @@ FUNCTION(read_all) {
       stat_target_reached = 0;
     }
 
-
   //home states  
-if (opmode_homing) {
-	//rtapi_print("we are in opmode_homing \n");
-	
-	if (((statusword >> 10) & 1) && ((statusword >> 12) & 1)){
-		rtapi_print("stat_homed_delay_counter gets incremented %d", stat_homed_delay_counter);
-		if (stat_homed_delay_counter > 100)
-			stat_homed = 1;
-		stat_homed_delay_counter++;
-	}
-    //stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
+  if (opmode_homing) {
+    if (!--stat_homed_delay)
+		stat_homed    = ((statusword >> 10) & 1) && ((statusword >> 12) & 1);
     stat_homing   = !stat_homed && !((statusword >> 10) & 1);
   }
-  
-  	if (stat_homed)
-		rtapi_print("stat_homed has been set \n");
-	
-	  	if (stat_homing)
-		rtapi_print("stat_homing has been set \n");
 
   // update fault output
   if (auto_fault_reset_delay > 0) {
@@ -265,10 +248,6 @@ if (opmode_homing) {
 }
 
 FUNCTION(write_all) {
-	//if (home)
-		//rtapi_print("write_all() \n");
-
-	
   int enable_edge;
 
   //init opmode
@@ -284,7 +263,6 @@ FUNCTION(write_all) {
   // write control register
   controlword = (1 << 2); // quick stop is not supported
   if (stat_fault) {
-	rtapi_print("home is disabled because of fault \n");
     home = 0; 
     if (fault_reset) {
       controlword |= (1 << 7); // fault reset
@@ -310,13 +288,8 @@ FUNCTION(write_all) {
   // write velocity command
   drv_target_velocity = (int32_t) (velocity_cmd * velo_scale);
 
-  if(stat_homed)
-	  rtapi_print("we are actually stat_homed right now, go figure! \n");
-
   // reset home command   
   if (home && (stat_homed && !stat_homed_old) && opmode_homing) {
-	rtapi_print("home is disabled because of reset home command \n");
-	stat_homed_delay_counter = 0;
     home = 0;
   }
   stat_homed_old = stat_homed;  
@@ -332,17 +305,10 @@ FUNCTION(write_all) {
   }
   // mode Home and start homing
   if (home) {
-
-	//rtapi_print("homing pin seen! \n");
     opmode = OPMODE_HOMING;
+	// flip bit 4 after opmode change is confirmed
 	if (opmode_homing)
-	  controlword |= (home << 4);
-		
-
-    
-
+      controlword |= (home << 4);
   }
-  
-
 }
 
