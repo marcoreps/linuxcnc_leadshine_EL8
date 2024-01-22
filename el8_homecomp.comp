@@ -90,6 +90,7 @@ EXTRA_SETUP() {
 #include USE_HOMING_BASE
 
 typedef struct {
+	bool custom_homing_flag;
     bool request_custom_homing;
     bool is_custom_homing;
 	bool custom_homing_finished;
@@ -99,6 +100,7 @@ static custom_home_local_data customH[EMCMOT_MAX_JOINTS];
 
 // data for per-joint custom-homing-specific hal pins:
 typedef struct {
+	hal_bit_t *custom_homing_flag;
     hal_bit_t *request_custom_homing;   // output requests custom homing
     hal_bit_t *is_custom_homing;        // input verifies custom homing
     hal_bit_t *custom_homing_finished;  // input from servo drive after homing
@@ -125,6 +127,8 @@ static int custom_makepins(int id,int njoints)
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
 
+        retval += hal_pin_bit_newf(HAL_IN, &(addr->custom_homing_flag), id,
+                                  "joint.%d.custom-homing-flag", jno);
         retval += hal_pin_bit_newf(HAL_IO, &(addr->request_custom_homing), id,
                                   "joint.%d.request-custom-homing", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->is_custom_homing), id,
@@ -262,11 +266,13 @@ bool do_homing(void)
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
 
-        // CUSTOM joint homing state machine for everybody:
-        homing_flag += custom_1joint_state_machine(joint_num);
-        if (H[joint_num].custom_homing_finished)
+        if (customH[joint_num].custom_homing_flag) {
+            // CUSTOM joint homing state machine:
+            homing_flag += custom_1joint_state_machine(joint_num);
+        } else {
             // DEFAULT joint homing state machine:
             homing_flag += base_1joint_state_machine(joint_num);
+        }
 
     }
     if ( homing_flag > 0 ) { /* one or more joint is homing */
