@@ -147,9 +147,6 @@ static void custom_read_homing_in_pins(int njoints)
         addr = &(custom_joint_home_data->custom_jhd[jno]);
         customH[jno].is_custom_homing = *(addr->is_custom_homing); // IN
 		customH[jno].custom_homing_finished = *(addr->custom_homing_finished); // IN
-		
-        // echo for verification:
-        customH[jno].custom_homing_flag = 1;
     }
 }
 
@@ -209,6 +206,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_FINI:
         rtapi_print("servo has finished homing yay \n");
 		customH[joint_num].request_custom_homing = 0;
+		customH[joint_num].custom_homing_flag = 1;
         H[joint_num].homing = 0;
         H[joint_num].homed  = 1;
         H[joint_num].home_state = HOME_IDLE;
@@ -269,13 +267,13 @@ bool do_homing(void)
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
 
-        if (customH[joint_num].custom_homing_flag) {
-            // CUSTOM joint homing state machine:
-            homing_flag += custom_1joint_state_machine(joint_num);
-        } else {
+        customH[joint_num].custom_homing_flag = 0;
+        // CUSTOM joint homing state machine for everybody:
+        homing_flag += custom_1joint_state_machine(joint_num);
+        if (custom_homing_flag)
             // DEFAULT joint homing state machine:
             homing_flag += base_1joint_state_machine(joint_num);
-        }
+
 
 
     }
