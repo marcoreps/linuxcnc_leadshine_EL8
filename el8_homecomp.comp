@@ -125,7 +125,7 @@ static int custom_makepins(int id,int njoints)
     for (jno = 0; jno < njoints; jno++) {
         addr = &(custom_joint_home_data->custom_jhd[jno]);
 
-        retval += hal_pin_bit_newf(HAL_OUT, &(addr->request_custom_homing), id,
+        retval += hal_pin_bit_newf(HAL_IO, &(addr->request_custom_homing), id,
                                   "joint.%d.request-custom-homing", jno);
         retval += hal_pin_bit_newf(HAL_IN, &(addr->is_custom_homing), id,
                                   "joint.%d.is-custom-homing", jno);
