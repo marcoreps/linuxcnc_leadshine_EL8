@@ -197,8 +197,8 @@ void check_scales(hal_float_t *scale,float *scale_old, double *scale_rcpt) {
 }
   
 FUNCTION(read_all) {
-		if (home)
-		rtapi_print("read_all() \n");
+		//if (home)
+		//rtapi_print("read_all() \n");
 
 
   // check for change in scale value
@@ -237,9 +237,10 @@ FUNCTION(read_all) {
 
   //home states  
 if (opmode_homing) {
-	rtapi_print("we are in opmode_homing \n");
+	//rtapi_print("we are in opmode_homing \n");
 	
 	if (((statusword >> 10) & 1) && ((statusword >> 12) & 1)){
+		rtapi_print("stat_homed_delay_counter gets incremented %d", stat_homed_delay_counter);
 		if (stat_homed_delay_counter > 100)
 			stat_homed = 1;
 		stat_homed_delay_counter++;
@@ -264,8 +265,8 @@ if (opmode_homing) {
 }
 
 FUNCTION(write_all) {
-	if (home)
-		rtapi_print("write_all() \n");
+	//if (home)
+		//rtapi_print("write_all() \n");
 
 	
   int enable_edge;
