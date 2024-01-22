@@ -194,12 +194,12 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 		
       case CUSTOM_4:
         rtapi_print("just a small delay , don't worry about it \n");
+		customH[joint_num].request_custom_homing = 0;
 	    chomestate[joint_num] = CUSTOM_5;
         break;
 		
       case CUSTOM_5:
         rtapi_print("probably not even necessary \n");
-		customH[joint_num].request_custom_homing = 0;
 	    chomestate[joint_num] = CUSTOM_6;
         break;
 		
