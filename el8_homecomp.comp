@@ -232,6 +232,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 				
 	case CUSTOM_9:
 		chomestate[joint_num] = CUSTOM_10;
+		rtapi_print("10 \n");
         break;
 				
 	case CUSTOM_10:
@@ -276,6 +277,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 				
 	case CUSTOM_20:
 		chomestate[joint_num] = CUSTOM_21;
+		rtapi_print("20 \n");
         break;
 				
 	case CUSTOM_21:
@@ -312,6 +314,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 				
 	case CUSTOM_29:
 		chomestate[joint_num] = CUSTOM_FINI;
+		rtapi_print("29 \n");
         break;
 		
       case CUSTOM_FINI:
