@@ -207,7 +207,111 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 		
       case CUSTOM_3:
 		if (10 > 1)
-			chomestate[joint_num] = CUSTOM_FINI;
+			chomestate[joint_num] = CUSTOM_4;
+        break;
+		
+	case CUSTOM_4:
+		chomestate[joint_num] = CUSTOM_5;
+        break;
+				
+	case CUSTOM_5:
+		chomestate[joint_num] = CUSTOM_6;
+        break;
+				
+	case CUSTOM_6:
+		chomestate[joint_num] = CUSTOM_7;
+        break;
+				
+	case CUSTOM_7:
+		chomestate[joint_num] = CUSTOM_8;
+        break;
+				
+	case CUSTOM_8:
+		chomestate[joint_num] = CUSTOM_9;
+        break;
+				
+	case CUSTOM_9:
+		chomestate[joint_num] = CUSTOM_10;
+        break;
+				
+	case CUSTOM_10:
+		chomestate[joint_num] = CUSTOM_11;
+        break;
+				
+	case CUSTOM_11:
+		chomestate[joint_num] = CUSTOM_12;
+        break;
+				
+	case CUSTOM_12:
+		chomestate[joint_num] = CUSTOM_13;
+        break;
+				
+	case CUSTOM_13:
+		chomestate[joint_num] = CUSTOM_14;
+        break;
+				
+	case CUSTOM_14:
+		chomestate[joint_num] = CUSTOM_15;
+        break;
+				
+	case CUSTOM_15:
+		chomestate[joint_num] = CUSTOM_16;
+        break;
+				
+	case CUSTOM_16:
+		chomestate[joint_num] = CUSTOM_17;
+        break;
+				
+	case CUSTOM_17:
+		chomestate[joint_num] = CUSTOM_18;
+        break;
+				
+	case CUSTOM_18:
+		chomestate[joint_num] = CUSTOM_19;
+        break;
+				
+	case CUSTOM_19:
+		chomestate[joint_num] = CUSTOM_20;
+        break;
+				
+	case CUSTOM_20:
+		chomestate[joint_num] = CUSTOM_21;
+        break;
+				
+	case CUSTOM_21:
+		chomestate[joint_num] = CUSTOM_22;
+        break;
+				
+	case CUSTOM_22:
+		chomestate[joint_num] = CUSTOM_23;
+        break;
+				
+	case CUSTOM_23:
+		chomestate[joint_num] = CUSTOM_24;
+        break;
+				
+	case CUSTOM_24:
+		chomestate[joint_num] = CUSTOM_25;
+        break;
+				
+	case CUSTOM_25:
+		chomestate[joint_num] = CUSTOM_26;
+        break;
+				
+	case CUSTOM_26:
+		chomestate[joint_num] = CUSTOM_27;
+        break;
+				
+	case CUSTOM_27:
+		chomestate[joint_num] = CUSTOM_28;
+        break;
+				
+	case CUSTOM_28:
+		chomestate[joint_num] = CUSTOM_29;
+        break;
+				
+	case CUSTOM_29:
+		chomestate[joint_num] = CUSTOM_FINI;
         break;
 		
       case CUSTOM_FINI:
