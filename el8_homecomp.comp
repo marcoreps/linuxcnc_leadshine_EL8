@@ -151,8 +151,7 @@ static int custom_1joint_state_machine(int joint_num)
 typedef enum {
     CUSTOM_IDLE = 0,
     CUSTOM_1    = 1,
-    CUSTOM_2    = 2,
-	CUSTOM_FINI  = 3,
+	CUSTOM_FINI  = 2,
 } custom_home_state_t;
 
 static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
@@ -170,24 +169,20 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_1:
         rtapi_print("state machine started \n");
         customH[joint_num].request_custom_homing = 1;
-        chomestate[joint_num] = CUSTOM_2;
-        break;
-		
-      case CUSTOM_2:
-	  
-        if (customH[joint_num].custom_homing_finished)
-          chomestate[joint_num] = CUSTOM_FINI;
+        chomestate[joint_num] = CUSTOM_FINI;
         break;
 		
       case CUSTOM_FINI:
-		rtapi_print("state machine finished \n");
-        H[joint_num].homing = 0;
-        H[joint_num].homed  = 1;
-        H[joint_num].home_state = HOME_IDLE;
-        chomestate[joint_num] = CUSTOM_IDLE;
-		customH[joint_num].request_custom_homing = 0;
-		rtapi_print("joint.motor-pos-cmd = %d \n", joints[joint_num].motor_pos_cmd);
-        return 0; // finished custom_home_states
+		if (customH[joint_num].custom_homing_finished){
+			rtapi_print("state machine finished \n");
+			H[joint_num].homing = 0;
+			H[joint_num].homed  = 1;
+			H[joint_num].home_state = HOME_IDLE;
+			chomestate[joint_num] = CUSTOM_IDLE;
+			customH[joint_num].request_custom_homing = 0;
+			rtapi_print("joint.motor-pos-cmd = %d \n", joints[joint_num].motor_pos_cmd);
+			return 0; // finished custom_home_states
+		}
         break;
       case CUSTOM_IDLE:
 	    
