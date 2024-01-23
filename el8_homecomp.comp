@@ -179,6 +179,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
       case CUSTOM_FINI:
 		if (customH[joint_num].custom_homing_finished){
 			rtapi_print("state machine finished \n");
+			joint->pos_cmd = 0.0;
 			H[joint_num].homing = 0;
 			H[joint_num].homed  = 1;
 			H[joint_num].home_state = HOME_IDLE;
