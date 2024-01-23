@@ -180,10 +180,6 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 			H[joint_num].home_state = HOME_IDLE;
 			chomestate[joint_num] = CUSTOM_IDLE;
 			
-			emcmot_joint_t joint = &joints[joint_num];
-            joint->pos_cmd = joint->pos_fb;
-            joint->free_tp.curr_pos = joint->pos_fb;
-			
 			customH[joint_num].request_custom_homing = 0;
 			rtapi_print("joint.motor-pos-cmd = %d \n", joints[joint_num].motor_pos_cmd);
 			return 0; // finished custom_home_states
