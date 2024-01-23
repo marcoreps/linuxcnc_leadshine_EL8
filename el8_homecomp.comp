@@ -286,6 +286,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 		rtapi_print("joint.free_tp.curr_pos = %d \n", joints[joint_num].free_tp.curr_pos);
 		rtapi_print("joint.pos_cmd = %d \n", joints[joint_num].pos_cmd);
 		rtapi_print("joint.pos_fb = %d \n", joints[joint_num].pos_fb);
+		rtapi_print("joint.motor-pos-cmd = %d \n", joints[joint_num].motor_pos_cmd);
         break;
 				
 	case CUSTOM_21:
@@ -326,6 +327,7 @@ static custom_home_state_t chomestate[EMCMOT_MAX_JOINTS] = {0};
 		rtapi_print("joint.free_tp.curr_pos = %d \n", joints[joint_num].free_tp.curr_pos);
 		rtapi_print("joint.pos_cmd = %d \n", joints[joint_num].pos_cmd);
 		rtapi_print("joint.pos_fb = %d \n", joints[joint_num].pos_fb);
+		rtapi_print("joint.motor-pos-cmd = %d \n", joints[joint_num].motor_pos_cmd);
         break;
 		
       case CUSTOM_FINI:
