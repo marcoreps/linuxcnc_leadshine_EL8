@@ -392,7 +392,7 @@ bool do_homing(void)
     do_homing_sequence();
     /* loop thru joints, treat each one individually */
     for (joint_num = 0; joint_num < all_joints; joint_num++) {
-		rtapi_print("joint.motor-pos-cmd = %f \n", joints[joint_num].motor_pos_cmd);
+
         if (!H[joint_num].joint_in_sequence)            { continue; }
         if (!GET_JOINT_ACTIVE_FLAG(&joints[joint_num])) { continue; }
 
