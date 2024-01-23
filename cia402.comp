@@ -232,7 +232,7 @@ FUNCTION(read_all) {
       stat_target_reached = 0;
     }
 	
-
+	rtapi_print("cia402 pos_cmd = %f \n", pos_cmd);
 
   //home states  
   if (opmode_homing) {
