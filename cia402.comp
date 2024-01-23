@@ -231,10 +231,11 @@ FUNCTION(read_all) {
     } else {
       stat_target_reached = 0;
     }
+	
+	rtapi_print("cia402 pos_cmd = %f \n", pos_cmd);
 
   //home states  
   if (opmode_homing) {
-	rtapi_print("cia402 pos_cmd = %f \n", pos_cmd);
 	if (((statusword >> 10) & 1) && ((statusword >> 12) & 1))
 		if (!--stat_homed_delay)
 			stat_homed    = 1;
