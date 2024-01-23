@@ -231,9 +231,6 @@ FUNCTION(read_all) {
     } else {
       stat_target_reached = 0;
     }
-	
-	rtapi_print("cia402 pos_cmd = %f \n", pos_cmd);
-	rtapi_print("cia402 drv_actual_position = %f \n", drv_actual_position);
 
   //home states  
   if (opmode_homing) {
