@@ -1,5 +1,17 @@
 <pyvcp>
 	
+	<labelframe text="EL1008">
+		<hbox>
+		<label>
+			<text>"Air OK "</text>
+		</label>
+		<led>
+			<halpin>"air-ok"</halpin>
+		</led>
+		</hbox>
+
+	</labelframe>
+	
     <labelframe text="EL2008">
 		<button>
 			<halpin>"dout0"</halpin>
@@ -8,6 +20,10 @@
 		<button>
 			<halpin>"dout1"</halpin>
 			<text>"Relay 2"</text>
+		</button>
+		<button>
+			<halpin>"toolchange"</halpin>
+			<text>"Tool change"</text>
 		</button>
     </labelframe>
     

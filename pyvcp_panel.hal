@@ -22,3 +22,5 @@ net z-torque-floated conv-s32-float.2.out => pyvcp.z-load
 
 net relay1 pyvcp.dout0 => lcec.0.6.dout-0
 net relay2 pyvcp.dout1 => lcec.0.6.dout-1
+#net toolchange pyvcp.toolchange => lcec.0.6.dout-6 lcec.0.6.dout-7
+net air-ok lcec.0.5.din-7 => pyvcp.air-ok
