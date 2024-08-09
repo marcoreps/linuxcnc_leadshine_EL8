@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<EtherCATInfo Version="1.6">
+	<Vendor>
+		<Id>#x000000E4</Id>
+		<Name>Metronix GmbH</Name>
+		<URL LcId="1031">www.metronix.de</URL>
+		<URL LcId="1033">www.metronix.de</URL>
+	</Vendor>
+	<Descriptions>
+		<Groups>
+			<Group SortOrder="0">
+				<Type>Drive</Type>
+				<Name LcId="1031">ARS2000</Name>
+				<Name LcId="1033">ARS2000</Name>
+			</Group>
+		</Groups>
+		<Devices>
+			<Device Physics="YY">
+				<Type ProductCode="#x264860d3" RevisionNo="#x00020000">ARS2000</Type>
+				<Name LcId="1033">ARS2000</Name>
+				<Name LcId="1031">ARS2000</Name>
+				<Info>
+					<StateMachine>
+						<Timeout>
+							<PreopTimeout>2000</PreopTimeout>
+							<SafeopOpTimeout>20000</SafeopOpTimeout>
+							<BackToInitTimeout>5000</BackToInitTimeout>
+							<BackToSafeopTimeout>200</BackToSafeopTimeout>
+						</Timeout>
+					</StateMachine>
+					<Mailbox>
+						<Timeout>
+							<RequestTimeout>100</RequestTimeout>
+							<ResponseTimeout>2000</ResponseTimeout>
+						</Timeout>
+					</Mailbox>
+				</Info>
+				<GroupType>Drive</GroupType>
+				<Fmmu>Outputs</Fmmu>
+				<Fmmu>Inputs</Fmmu>
+				<Sm MinSize="6" MaxSize="40" DefaultSize="16" StartAddress="#x1800" ControlByte="#x26" Enable="1">MBoxOut</Sm>
+				<Sm MinSize="6" MaxSize="40" DefaultSize="16" StartAddress="#x1900" ControlByte="#x12" Enable="1">MBoxIn</Sm>
+				<Sm StartAddress="#x1600" ControlByte="#x24" Enable="1">Outputs</Sm>
+				<Sm StartAddress="#x1A00" ControlByte="#x10" Enable="1">Inputs</Sm>
+				<RxPdo Fixed="0" Sm="2">
+					<Index>#x1600</Index>
+					<Name>Outputs1</Name>
+					<Entry>
+						<Index>#x6040</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>16</BitLen>
+						<Name>control_word</Name>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6060</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>8</BitLen>
+						<Name>modes_of_operation</Name>
+						<DataType>SINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6098</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>8</BitLen>
+						<Name>homing_method</Name>
+						<DataType>SINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x607A</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>32</BitLen>
+						<Name>target_position</Name>
+						<DataType>DINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="0" Sm="2">
+					<Index>#x1601</Index>
+					<Name>Outputs2</Name>
+					<Entry>
+						<Index>#x60FF</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>32</BitLen>
+						<Name>target_velocity</Name>
+						<DataType>DINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6071</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>16</BitLen>
+						<Name>target_torque</Name>
+						<DataType>INT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x0006</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>16</BitLen>
+						<Name>dummy_uint16</Name>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<TxPdo Fixed="0" Sm="3">
+					<Index>#x1a00</Index>
+					<Name>Inputs1</Name>
+					<Entry>
+						<Index>#x6041</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>16</BitLen>
+						<Name>status_word</Name>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6064</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>32</BitLen>
+						<Name>position_actual_value</Name>
+						<DataType>DINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6061</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>8</BitLen>
+						<Name>modes_of_operation_display</Name>
+						<DataType>SINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x1001</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>8</BitLen>
+						<Name>error_register</Name>
+						<DataType>USINT</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="0" Sm="3">
+					<Index>#x1a01</Index>
+					<Name>Inputs2</Name>
+					<Entry>
+						<Index>#x606C</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>32</BitLen>
+						<Name>velocity_actual_value</Name>
+						<DataType>DINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6077</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>16</BitLen>
+						<Name>torque_actual_value</Name>
+						<DataType>INT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x0006</Index>
+						<SubIndex>0</SubIndex>
+						<BitLen>16</BitLen>
+						<Name>dummy_uint16</Name>
+						<DataType>UINT</DataType>
+					</Entry>
+				</TxPdo>
+				<Mailbox>
+					<CoE SdoInfo="false" SegmentedSdo="false" CompleteAccess="false" PdoAssign="true" PdoConfig="true">
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								R-PDO1 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1400</Index>
+							<SubIndex>1</SubIndex>
+							<Data>01020080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								R-PDO2 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1401</Index>
+							<SubIndex>1</SubIndex>
+							<Data>01030080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								R-PDO3 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1402</Index>
+							<SubIndex>1</SubIndex>
+							<Data>01040080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								R-PDO4 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1403</Index>
+							<SubIndex>1</SubIndex>
+							<Data>01050080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								T-PDO1 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1800</Index>
+							<SubIndex>1</SubIndex>
+							<Data>81010080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								T-PDO2 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1801</Index>
+							<SubIndex>1</SubIndex>
+							<Data>81020080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								T-PDO3 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1802</Index>
+							<SubIndex>1</SubIndex>
+							<Data>81030080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								T-PDO4 deaktivieren</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1803</Index>
+							<SubIndex>1</SubIndex>
+							<Data>81040080</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear SM2 PDOs</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1C12</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear SM3 PDOs</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1C13</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear R-PDO1 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1600</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear R-PDO2 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1601</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear R-PDO3 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1602</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear R-PDO4 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1603</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear T-PDO1 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1A00</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear T-PDO2 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1A01</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear T-PDO3 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1A02</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>IP</Transition>
+							<Comment>
+								Clear T-PDO4 entries</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1A03</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								R-PDO1 transmission type Sync</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1400</Index>
+							<SubIndex>2</SubIndex>
+							<Data>01</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								R-PDO2 transmission type Sync</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1401</Index>
+							<SubIndex>2</SubIndex>
+							<Data>01</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								R-PDO1 aktiv</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1400</Index>
+							<SubIndex>1</SubIndex>
+							<Data>01020040</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								R-PDO2 aktiv</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1401</Index>
+							<SubIndex>1</SubIndex>
+							<Data>01030040</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								T-PDO1 transmission type SYNC</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1800</Index>
+							<SubIndex>2</SubIndex>
+							<Data>01</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								T-PDO2 transmission type SYNC</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1801</Index>
+							<SubIndex>2</SubIndex>
+							<Data>01</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								TxPDO1 aktiv</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1800</Index>
+							<SubIndex>1</SubIndex>
+							<Data>81010040</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Comment>
+								TxPDO2 aktiv</Comment>
+							<Timeout>0</Timeout>
+							<Ccs>1</Ccs>
+							<Index>#x1801</Index>
+							<SubIndex>1</SubIndex>
+							<Data>81020040</Data>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Index>#x6040</Index>
+							<SubIndex>0</SubIndex>
+							<Data>8000</Data>
+							<Comment>Controlword: fault reset</Comment>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Index>#x1003</Index>
+							<SubIndex>0</SubIndex>
+							<Data>00</Data>
+							<Comment>Clear error field</Comment>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Index>#x6510</Index>
+							<SubIndex>#x10</SubIndex>
+							<Data>0200</Data>
+							<Comment>Enable logic: DIN9 and CANopen</Comment>
+						</InitCmd>
+						<InitCmd>
+							<Transition>PS</Transition>
+							<Index>#x6060</Index>
+							<SubIndex>0</SubIndex>
+							<Data>08</Data>
+							<Comment>CSP mode</Comment>
+						</InitCmd>
+					</CoE>
+				</Mailbox>
+				<Dc UnknownFRMW="1">
+					<OpMode>
+						<Name>DcSync</Name>
+						<Desc>DC for synchronization</Desc>
+						<AssignActivate>#x0300</AssignActivate>
+						<CycleTimeSync0 Factor="1">0</CycleTimeSync0>
+						<ShiftTimeSync0>0</ShiftTimeSync0>
+						<Sm No="2">
+							<SyncType>2</SyncType>
+							<CycleTime Factor="1">0</CycleTime>
+							<ShiftTime MinAfterSync="0">0</ShiftTime>
+						</Sm>
+						<Sm No="3">
+							<SyncType>2</SyncType>
+							<CycleTime Factor="1">0</CycleTime>
+							<ShiftTime MinBeforeFrame="100">0</ShiftTime>
+						</Sm>
+					</OpMode>
+					<OpMode>
+						<Name>DcOff</Name>
+						<Desc>DC unused</Desc>
+						<AssignActivate>#x0000</AssignActivate>
+						<Sm No="2">
+							<SyncType>1</SyncType>
+							<CycleTime Factor="1">0</CycleTime>
+							<ShiftTime MinAfterSync="100">100</ShiftTime>
+						</Sm>
+						<Sm No="3">
+							<SyncType>34</SyncType>
+							<CycleTime Factor="1">0</CycleTime>
+							<ShiftTime MinBeforeFrame="100">0</ShiftTime>
+						</Sm>
+					</OpMode>
+				</Dc>
+				<Eeprom>
+					<ByteSize>1024</ByteSize>
+					<ConfigData>0800000664000000000000000000F500E4000000D360482600000200000000000000000000000000000000000000000000181000001910000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070001000A000800020544726976650741525332303030001E00100001000002000D000000000000000001001100000000000000000000000000000028000100010229001000001810002600010100191000120001020016000024000103001A000010000104FFFF</ConfigData>
+				</Eeprom>
+			</Device>
+		</Devices>
+	</Descriptions>
+</EtherCATInfo>
+
+
