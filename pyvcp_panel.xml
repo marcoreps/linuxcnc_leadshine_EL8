@@ -51,4 +51,28 @@
         </bar>
     </labelframe>
     
+    <labelframe text="Spindle">
+		<label>
+            <text>"Speed [RPM]:"</text>
+        </label>
+        <bar>
+            <halpin>"spindle-rpm"</halpin>
+            <max_>30000</max_>
+        </bar>
+		<label>
+            <text>"Current [A]:"</text>
+        </label>
+        <bar>
+            <halpin>"spindle-current"</halpin>
+            <max_>6</max_>
+        </bar>
+		<label>
+            <text>"VFD Temperature [°C]:"</text>
+        </label>
+        <bar>
+            <halpin>"spindle-vfd-temperature"</halpin>
+            <max_>40</max_>
+        </bar>
+	</labelframe>
+    
 </pyvcp>

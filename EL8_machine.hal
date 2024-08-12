@@ -1,22 +1,25 @@
 loadrt [KINS]KINEMATICS
-loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
+loadrt [EMCMOT]EMCMOT servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=5
 loadusr -W lcec_conf ethercat-conf.xml
 loadrt lcec
-loadrt cia402 count=3
-loadrt mult2
-loadusr -W wj200_vfd --device /dev/ttyUSB1
+loadrt cia402 count=5
+loadrt mult2 count=1
 
 
+addf mult2.0                  servo-thread
 addf lcec.read-all            servo-thread
 addf cia402.0.read-all        servo-thread
 addf cia402.1.read-all        servo-thread
 addf cia402.2.read-all        servo-thread
+addf cia402.3.read-all        servo-thread
+addf cia402.4.read-all        servo-thread
 addf motion-command-handler   servo-thread
 addf motion-controller        servo-thread
-addf mult2.0                   servo-thread
 addf cia402.0.write-all       servo-thread
 addf cia402.1.write-all       servo-thread
 addf cia402.2.write-all       servo-thread
+addf cia402.3.write-all       servo-thread
+addf cia402.4.write-all       servo-thread
 addf lcec.write-all           servo-thread
 
 setp iocontrol.0.emc-enable-in 1
@@ -26,22 +29,54 @@ setp iocontrol.0.emc-enable-in 1
 #  Spindle
 #*******************
 
-setp mult2.0.in1 2
-setp wj200-vfd.0.mbslaveaddr 5
-setp wj200-vfd.0.enable 1
+#setp wj200-vfd.0.enable 1
+#net spindle-speed spindle.0.speed-out-rps-abs => wj200-vfd.0.commanded-frequency
 
-net schpeeed spindle.0.speed-out-rps-abs => mult2.0.in0
-net 4pole_correction mult2.0.out => wj200-vfd.0.commanded-frequency
-net spindle-startsignal spindle.0.on => wj200-vfd.0.run
-net spindle-direction spindle.0.reverse => wj200-vfd.0.reverse
-net spindle-at-speed <= wj200-vfd.0.is-at-speed
+#net spindle-direction spindle.0.reverse => wj200-vfd.0.reverse
+#net spindle-at-speed <= wj200-vfd.0.is-at-speed
+
+
+
+setp cia402.4.csp-mode 0
+setp cia402.4.pos-scale -2000
+
+
+net spindle-scale spindle.0.speed-out => mult2.0.in0
+setp mult2.0.in1 10000
+
+# joint signals for motion
+net spindle-pos-cmd     joint.4.motor-pos-cmd => cia402.4.pos-cmd
+net spindle-pos-fb      joint.4.motor-pos-fb <= cia402.4.pos-fb
+net spindle-speed       mult2.0.out => cia402.4.velocity-cmd
+
+net spindle-startsignal spindle.0.on => cia402.4.enable
+
+net spindle-amp-fault    joint.4.amp-fault-in   <= cia402.4.drv-fault
+
+# ethercat to cia402 driver
+net spindle-statusword      lcec.0.7.cia-statusword  => cia402.4.statusword
+net spindle-opmode-display  lcec.0.7.opmode-display  => cia402.4.opmode-display
+net spindle-drv-act-pos     lcec.0.7.actual-position => cia402.4.drv-actual-position
+
+# cia402 driver to ethercat
+net spindle-controlword         cia402.4.controlword         => lcec.0.7.cia-controlword
+net spindle-modes-of-operation  cia402.4.opmode              => lcec.0.7.opmode
+net spindle-drv-target-pos      cia402.4.drv-target-position => lcec.0.7.target-position
+net spindle-drv-target-vel      cia402.4.drv-target-velocity => lcec.0.7.target-velocity
+
+# homing
+net spindle-home-request joint.4.request-custom-homing => cia402.4.home
+net spindle-homing joint.4.is-custom-homing <= cia402.4.stat-homing
+net spindle-homed joint.4.custom-homing-finished <= cia402.4.stat-homed
+
+
 
 #*******************
 #  AXIS X
 #*******************
 
 setp cia402.0.csp-mode 1
-setp cia402.0.pos-scale 10000
+setp cia402.0.pos-scale -2000
 
 # joint signals for motion
 net x-pos-cmd     joint.0.motor-pos-cmd => cia402.0.pos-cmd
@@ -69,7 +104,7 @@ net x-homed joint.0.custom-homing-finished <= cia402.0.stat-homed
 #*******************
 
 setp cia402.1.csp-mode 1
-setp cia402.1.pos-scale 10000
+setp cia402.1.pos-scale 2000
 
 # joint signals for motion
 net y-pos-cmd     joint.1.motor-pos-cmd => cia402.1.pos-cmd
@@ -97,7 +132,7 @@ net y-homed joint.1.custom-homing-finished <= cia402.1.stat-homed
 #*******************
 
 setp cia402.2.csp-mode 1
-setp cia402.2.pos-scale 10000
+setp cia402.2.pos-scale -2000
 
 # joint signals for motion
 net z-pos-cmd     joint.2.motor-pos-cmd => cia402.2.pos-cmd
@@ -124,26 +159,26 @@ net z-homed joint.2.custom-homing-finished <= cia402.2.stat-homed
 #  AXIS A
 #*******************
 
-#setp cia402.3.csp-mode 1
-#setp cia402.3.pos-scale 10000
+setp cia402.3.csp-mode 1
+setp cia402.3.pos-scale -2000
 
 # joint signals for motion
-#net a-pos-cmd     joint.3.motor-pos-cmd => cia402.3.pos-cmd
-#net a-pos-fb      joint.3.motor-pos-fb <= cia402.3.pos-fb
-#net a-enable      joint.3.amp-enable-out => cia402.3.enable
-#net a-amp-fault   joint.3.amp-fault-in   <= cia402.3.drv-fault
+net a-pos-cmd     joint.3.motor-pos-cmd => cia402.3.pos-cmd
+net a-pos-fb      joint.3.motor-pos-fb <= cia402.3.pos-fb
+net a-enable      joint.3.amp-enable-out => cia402.3.enable
+net a-amp-fault   joint.3.amp-fault-in   <= cia402.3.drv-fault
 
 # ethercat to cia402 driver
-#net a-statusword      lcec.0.0.cia-statusword  => cia402.3.statusword
-#net a-opmode-display  lcec.0.0.opmode-display  => cia402.3.opmode-display
-#net a-drv-act-pos     lcec.0.0.actual-position => cia402.3.drv-actual-position
+net a-statusword      lcec.0.0.cia-statusword  => cia402.3.statusword
+net a-opmode-display  lcec.0.0.opmode-display  => cia402.3.opmode-display
+net a-drv-act-pos     lcec.0.0.actual-position => cia402.3.drv-actual-position
 
 # cia402 driver to ethercat
-#net a-controlword         cia402.3.controlword         => lcec.0.0.cia-controlword
-#net a-modes-of-operation  cia402.3.opmode              => lcec.0.0.opmode
-#net a-drv-target-pos      cia402.3.drv-target-position => lcec.0.0.target-position
+net a-controlword         cia402.3.controlword         => lcec.0.0.cia-controlword
+net a-modes-of-operation  cia402.3.opmode              => lcec.0.0.opmode
+net a-drv-target-pos      cia402.3.drv-target-position => lcec.0.0.target-position
 
 # homing
-#net a-home-request joint.3.request-custom-homing => cia402.3.home
-#net a-homing joint.3.is-custom-homing <= cia402.3.stat-homing
-#net a-homed joint.3.custom-homing-finished <= cia402.3.stat-homed
+net a-home-request joint.3.request-custom-homing => cia402.3.home
+net a-homing joint.3.is-custom-homing <= cia402.3.stat-homing
+net a-homed joint.3.custom-homing-finished <= cia402.3.stat-homed
