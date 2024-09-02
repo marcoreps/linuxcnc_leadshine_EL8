@@ -64,14 +64,14 @@
         </label>
         <bar>
             <halpin>"spindle-current"</halpin>
-            <max_>6</max_>
+            <max_>10</max_>
         </bar>
 		<label>
             <text>"VFD Temperature [°C]:"</text>
         </label>
         <bar>
-            <halpin>"spindle-vfd-temperature"</halpin>
-            <max_>40</max_>
+            <halpin>"vfd-temperature"</halpin>
+            <max_>50</max_>
         </bar>
 	</labelframe>
     

@@ -1,34 +1,42 @@
-loadrt abs_s32 count=3
-loadrt conv_s32_float count=3
-#loadrt mult2
+loadrt abs_s32 count=4
+
 
 addf abs-s32.0 				servo-thread
 addf abs-s32.1 				servo-thread
 addf abs-s32.2 				servo-thread
+addf abs-s32.3 				servo-thread
 addf conv-s32-float.0 		servo-thread
 addf conv-s32-float.1 		servo-thread
 addf conv-s32-float.2 		servo-thread
-#addf mult2.0        		servo-thread
+addf conv-s32-float.3 		servo-thread
+addf conv-s32-float.4 		servo-thread
+addf mult2.3        		servo-thread
+addf mult2.4        		servo-thread
 
 net x-torque-signed lcec.0.3.actual-torque => abs-s32.0.in
 net y-torque-signed lcec.0.2.actual-torque => abs-s32.1.in
 net z-torque-signed lcec.0.1.actual-torque => abs-s32.2.in
+net s-torque-signed lcec.0.7.actual-torque => abs-s32.3.in
 
 net x-torque-absed abs-s32.0.out => conv-s32-float.0.in
 net y-torque-absed abs-s32.1.out => conv-s32-float.1.in
 net z-torque-absed abs-s32.2.out => conv-s32-float.2.in
+net s-torque-absed abs-s32.3.out => conv-s32-float.3.in
+
+net vfd-temperature-s32 lcec.0.7.vfd-temperature => conv-s32-float.4.in
+net vfd-temperature-floated conv-s32-float.4.out => pyvcp.vfd-temperature
 
 net x-torque-floated conv-s32-float.0.out => pyvcp.x-load
 net y-torque-floated conv-s32-float.1.out => pyvcp.y-load
 net z-torque-floated conv-s32-float.2.out => pyvcp.z-load
+net s-torque-floated conv-s32-float.3.out => mult2.4.in0
+setp mult2.4.in1 0.01
+net s-torque-scaled mult2.4.out => pyvcp.spindle-current
 
 net relay1 pyvcp.dout0 => lcec.0.6.dout-0
 net relay2 pyvcp.dout1 => lcec.0.6.dout-1
 #net toolchange pyvcp.toolchange => lcec.0.6.dout-6 lcec.0.6.dout-7
 net air-ok lcec.0.5.din-7 => pyvcp.air-ok
 
-#net spindle-current wj200-vfd.0.motor-current => pyvcp.spindle-current
-#setp mult2.0.in0 60
-#net spindle-speed => mult2.0.in1
-#net spindle-rpm mult2.0.out => pyvcp.spindle-rpm 
-#net spindle-vfd-temperature wj200-vfd.0.heatsink-temp => pyvcp.spindle-vfd-temperature
+net spindle-rpm-fb-scaled  => pyvcp.spindle-rpm
+

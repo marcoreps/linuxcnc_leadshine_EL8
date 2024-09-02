@@ -90,19 +90,19 @@
     <slave idx="6" type="EL2008"/>
     
     <!-- Spindle Metronix ARS 2310 FS -->
-    <slave idx="7" type="generic" vid="000000e4" pid="264860d3" configPdos="true">
+    <slave idx="7" type="generic" vid="000000e4" pid="264860d3" configPdos="false">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="2" dir="out">
         <pdo idx="1600">
           <pdoEntry idx="6040" subIdx="00" bitLen="16" halPin="cia-controlword" halType="u32"/>
           <pdoEntry idx="6060" subIdx="00" bitLen="8" halPin="opmode" halType="s32"/>
-          <pdoEntry idx="6098" subIdx="00" bitLen="8" halPin="homing_method" halType="s32"/>
+          <pdoEntry idx="6098" subIdx="00" bitLen="8" halPin="homing-method" halType="s32"/>
           <pdoEntry idx="607A" subIdx="00" bitLen="32" halPin="target-position" halType="s32"/>
         </pdo>
         <pdo idx="1601">
           <pdoEntry idx="60FF" subIdx="00" bitLen="32" halPin="target-velocity" halType="s32"/>
-          <pdoEntry idx="6071" subIdx="00" bitLen="16" halPin="target_torque" halType="s32"/>
-          <pdoEntry idx="6071" subIdx="00" bitLen="16" halPin="target_torque_dummy" halType="s32"/>
+          <pdoEntry idx="6071" subIdx="00" bitLen="16" halPin="target-torque" halType="s32"/>
+          <pdoEntry idx="6071" subIdx="00" bitLen="16" halPin="target-torque-dummy" halType="s32"/>
         </pdo>
       </syncManager>
       <syncManager idx="3" dir="in">
@@ -110,18 +110,15 @@
           <pdoEntry idx="6041" subIdx="00" bitLen="16" halPin="cia-statusword" halType="u32"/>
           <pdoEntry idx="6064" subIdx="00" bitLen="32" halPin="actual-position" halType="s32"/>
           <pdoEntry idx="6061" subIdx="00" bitLen="8" halPin="opmode-display" halType="s32"/>
-		  <pdoEntry idx="1001" subIdx="00" bitLen="8" halPin="error_register" halType="s32"/>
+		  <pdoEntry idx="1001" subIdx="00" bitLen="8" halPin="error-register" halType="s32"/>
         </pdo>
         <pdo idx="1a01">
           <pdoEntry idx="606C" subIdx="00" bitLen="32" halPin="actual-velocity" halType="s32"/>
-          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="torque_actual_value" halType="s32"/>
-          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="torque_actual_value_dummy" halType="s32"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halPin="actual-torque" halType="s32"/>
+          <pdoEntry idx="6510" subIdx="31" bitLen="16" halPin="vfd-temperature" halType="s32"/>
         </pdo>
       </syncManager>
-      
-
-
-      
+	  <sdoConfig idx="0x2090" subIdx="01"><sdoDataRaw data="01"/></sdoConfig> <!-- enable ramps, this is forgotten at opmode change -->
     </slave>
 
   </master>
