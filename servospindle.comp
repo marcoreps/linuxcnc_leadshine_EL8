@@ -1,0 +1,63 @@
+//   This is a component for LinuxCNC HAL
+//   Copyright 2015 Frank Brossette
+//
+//   This program is free software; you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation; either version 2 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program; if not, write to the Free Software
+//   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+component servospindle "lathe spindle with servomotor and synchron motion";
+
+//---------------------------------------------------------------
+
+pin io  bit index_enable "index enable from/to motion";
+pin out bit index "generated index pulse";
+pin in  float servopos "position servomotor";
+pin out float spindlepos "position spindle";
+variable float new_decimal_place;
+variable float old_decimal_place;
+variable float diff_decimal_place;
+variable int offset = 0;
+
+//---------------------------------------------------------------
+
+function _;
+license "GPL";
+
+;;
+
+FUNCTION(_)
+{
+int turns = (int)servopos;
+
+	new_decimal_place = servopos - turns;
+
+	diff_decimal_place = new_decimal_place - old_decimal_place;
+
+	if ((diff_decimal_place > 0.7) || (diff_decimal_place < -0.7))
+		index = 1;
+	else
+		index = 0;
+
+	if(index_enable && index)
+	{
+		offset = turns;
+		index_enable = 0;
+	}		 
+
+	spindlepos = servopos - offset;
+
+	old_decimal_place = new_decimal_place;
+}
+
+
+

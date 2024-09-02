@@ -149,11 +149,11 @@
 						<DataType>INT</DataType>
 					</Entry>
 					<Entry>
-						<Index>#x0006</Index>
-						<SubIndex>0</SubIndex>
+						<Index>#x6510</Index>
+						<SubIndex>2E</SubIndex>
 						<BitLen>16</BitLen>
-						<Name>dummy_uint16</Name>
-						<DataType>UINT</DataType>
+						<Name>motor_temperature</Name>
+						<DataType>INT</DataType>
 					</Entry>
 				</TxPdo>
 				<Mailbox>
