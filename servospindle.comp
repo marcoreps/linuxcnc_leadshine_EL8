@@ -23,6 +23,7 @@ pin io  bit index_enable "index enable from/to motion";
 pin out bit index "generated index pulse";
 pin in  float servopos "position servomotor";
 pin out float spindlepos "position spindle";
+pin out float derived_rpm "calculated rpm spindle";
 variable float new_decimal_place;
 variable float old_decimal_place;
 variable float diff_decimal_place;
@@ -37,7 +38,7 @@ license "GPL";
 
 FUNCTION(_)
 {
-int turns = (int)servopos;
+	int turns = (int)servopos;
 
 	new_decimal_place = servopos - turns;
 
@@ -57,6 +58,8 @@ int turns = (int)servopos;
 	spindlepos = servopos - offset;
 
 	old_decimal_place = new_decimal_place;
+	
+	derived_rpm = diff_decimal_place * 1;
 }
 
 

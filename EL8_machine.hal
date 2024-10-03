@@ -81,11 +81,6 @@ net spindle-pos-fb-scaled mult2.0.out => servospindle.0.servopos
 net servospindle-pos-fb servospindle.0.spindlepos => spindle.0.revs
 
 
-
-
-
-
-
 # ethercat to cia402 driver
 net spindle-statusword      lcec.0.7.cia-statusword  => cia402.4.statusword
 net spindle-opmode-display  lcec.0.7.opmode-display  => cia402.4.opmode-display
