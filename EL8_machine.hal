@@ -11,7 +11,7 @@ loadrt servospindle
 
 loadrt conv_s32_float count=7
 
-addf servospindle.0 servo-thread 
+addf servospindle.0	          servo-thread 
 addf mult2.0 		          servo-thread 
 addf mult2.1 		          servo-thread 
 addf mult2.2 		          servo-thread 
@@ -56,11 +56,11 @@ net tool-change-confirm hal_manualtoolchange.changed => iocontrol.0.tool-changed
 # normal spindly stuff
 setp cia402.4.csp-mode 0
 net spindle-rpm-cmd			spindle.0.speed-out => mult2.1.in0
-setp mult2.1.in1 10
+setp mult2.1.in1 100
 net spindle-rpm-cmd-scaled mult2.1.out => cia402.4.velocity-cmd
 
 net spindle-rpm-fb          cia402.4.velocity-fb => mult2.2.in0
-setp mult2.2.in1 0.1
+setp mult2.2.in1 0.01
 net spindle-rpm-fb-scaled   mult2.2.out => spindle.0.speed-in
 net spindle-startsignal 	joint.4.amp-enable-out => cia402.4.enable
 net spindle-amp-fault    	joint.4.amp-fault-in   <= cia402.4.drv-fault
@@ -77,8 +77,8 @@ net spindle-at-speed-from-debounce dbounce.0.out => spindle.0.at-speed
 
 # hal encoder workaround for rigid tapping
 net spindle-index-enable servospindle.0.index-enable <=> spindle.0.index-enable
-net spindle-pos-fb-scaled mult2.0.out => servospindle.0.servopos
-net servospindle-pos-fb servospindle.0.spindlepos => spindle.0.revs
+net spindle-pos-fb-scaled mult2.0.out => servospindle.0.pos-input
+net servospindle-pos-fb servospindle.0.pos-output => spindle.0.revs
 
 
 # ethercat to cia402 driver
@@ -86,7 +86,7 @@ net spindle-statusword      lcec.0.7.cia-statusword  => cia402.4.statusword
 net spindle-opmode-display  lcec.0.7.opmode-display  => cia402.4.opmode-display
 net spindle-pos-fb          lcec.0.7.actual-position => conv-s32-float.6.in
 net spindle-pos-fb-floated  conv-s32-float.6.out => mult2.0.in0
-setp mult2.0.in1 0.01
+setp mult2.0.in1 1
 net spindle-drv-act-vel     lcec.0.7.actual-velocity => cia402.4.drv-actual-velocity
 
 

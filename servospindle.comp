@@ -21,13 +21,12 @@ component servospindle "lathe spindle with servomotor and synchron motion";
 
 pin io  bit index_enable "index enable from/to motion";
 pin out bit index "generated index pulse";
-pin in  float servopos "position servomotor";
-pin out float spindlepos "position spindle";
+pin in  float pos_input "position from servo drive";
+pin out float pos_output "position to hal";
 pin out float derived_rpm "calculated rpm spindle";
-variable float new_decimal_place;
-variable float old_decimal_place;
-variable float diff_decimal_place;
-variable int offset = 0;
+variable uint32_t new_counts;
+variable float previous_pos;
+variable float offset;
 
 //---------------------------------------------------------------
 
@@ -38,28 +37,27 @@ license "GPL";
 
 FUNCTION(_)
 {
-	int turns = (int)servopos;
 
-	new_decimal_place = servopos - turns;
+	new_counts = pos_input;
 
-	diff_decimal_place = new_decimal_place - old_decimal_place;
-
-	if ((diff_decimal_place > 0.7) || (diff_decimal_place < -0.7))
+	if (new_counts%100000 <= 1000)
 		index = 1;
 	else
 		index = 0;
 
 	if(index_enable && index)
 	{
-		offset = turns;
+		offset = pos_input;
 		index_enable = 0;
-	}		 
+	}
 
-	spindlepos = servopos - offset;
+	pos_output = (pos_input - offset)/100000;
 
-	old_decimal_place = new_decimal_place;
+	derived_rpm = (pos_input-previous_pos) * 1;
+
+	previous_pos = pos_input;
 	
-	derived_rpm = diff_decimal_place * 1;
+	
 }
 
 

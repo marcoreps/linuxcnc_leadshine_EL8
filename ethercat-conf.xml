@@ -90,7 +90,7 @@
     <slave idx="6" type="EL2008"/>
     
     <!-- Spindle Metronix ARS 2310 FS -->
-    <slave idx="7" type="generic" vid="000000e4" pid="264860d3" configPdos="false">
+    <slave idx="7" type="generic" vid="000000e4" pid="264860d3" configPdos="true">
 	  <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="0"/>
       <syncManager idx="2" dir="out">
         <pdo idx="1600">
